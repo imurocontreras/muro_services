@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+  <title>Data & Technology • Muro Consulting Services</title>
+
+  <link rel="icon" href="assets/favicon.ico?v=3" sizes="any">
+  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png?v=3" sizes="180x180">
+  <meta name="theme-color" content="#f5f5f5">
+
+  <!-- Fonts / Tailwind (same config as Operations) -->
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Poppins:wght@400;600&display=swap" rel="stylesheet"/>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: { extend: {
+        colors:{ primary:'#568a99', accent:'#446c77', secondary:'#c79f7f', paper:'#f5f5f5', 'dark-brown':'#856042','dark-grey':'#818c8e' },
+        fontFamily:{ montserrat:['Montserrat','sans-serif'], poppins:['Poppins','sans-serif'] },
+        boxShadow:{ card:'0 10px 25px rgba(0,0,0,.07)' }
+      } }
+    }
+  </script>
+
+  <style>
+    :root{ --nav-h:64px; }
+    html{ scroll-behavior:smooth; }
+    body{ background:#f5f5f5; color:#818c8e; font-family:'Poppins',sans-serif; }
+
+    /* Fullscreen sections (like Operations file) */
+    section.full{
+      height: calc(100vh - var(--nav-h));
+      min-height: calc(100vh - var(--nav-h));
+      display:flex; align-items:center; position:relative; padding:0 1rem;
+    }
+    @supports (height:100svh){ section.full{ height:calc(100svh - var(--nav-h)); min-height:calc(100svh - var(--nav-h)); } }
+
+    .container{ width:100%; max-width:1120px; margin-inline:auto; }
+    nav{ -webkit-backdrop-filter:saturate(1.1) blur(6px); backdrop-filter:saturate(1.1) blur(6px); }
+
+    /* Arrow animation */
+    .section-arrow{ position:absolute; left:50%; bottom:14px; transform:translateX(-50%); opacity:.9; animation:float 3.2s ease-in-out infinite; color:#856042; }
+    @keyframes float{ 0%,100%{transform:translate(-50%,0)} 50%{transform:translate(-50%,-6px)} }
+    @media (prefers-reduced-motion:reduce){ .section-arrow{ animation:none } }
+
+    .h-title{ font-family:'Montserrat',sans-serif; color:#856042; }
+
+    /* Circles (tabs) */
+    .circle{ width:184px; height:184px; border-radius:9999px; background:#fff; box-shadow:0 8px 22px rgba(0,0,0,.06); display:flex; align-items:center; justify-content:center; margin-inline:auto; border:1px solid rgba(199,159,127,.28); transition:transform .18s ease; }
+    .circle img{ width:86px; opacity:.9 }
+    .tile-title{ color:#856042; font-weight:600; text-align:center; margin-top:.8rem; }
+    .tab[aria-selected="true"] .circle{ transform:translateY(-2px); box-shadow:0 12px 28px rgba(0,0,0,.08); border-color:#c79f7f; }
+
+    /* Under-circle reveal panel (same pattern as Operations) */
+    .reveal-panel{
+      background:#ffffff; border-radius:16px; border:1px solid rgba(199,159,127,.35);
+      box-shadow:0 8px 22px rgba(0,0,0,.06);
+    }
+
+    .feature-pill{ background:#e0ebef; border:1px solid rgba(68,108,119,.18); border-radius:16px; }
+    .fade-divider{ height:1px; background:linear-gradient(90deg,transparent,#c7a288,transparent); max-width:420px; margin:22px auto 0; opacity:.5; }
+
+    /* Dropdown Menu */
+    .dropdown { 
+      position: relative; 
+      display: inline-block;
+    }
+    .dropdown > a {
+      display: block;
+    }
+    .dropdown-menu {
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #f5f5f5;
+      border: 1px solid rgba(133,96,66,.2);
+      border-radius: 12px;
+      box-shadow: 0 8px 25px rgba(0,0,0,.1);
+      padding: 12px;
+      min-width: 200px;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity .2s ease, visibility .2s ease, transform .2s ease;
+      transform: translateX(-50%) translateY(-4px);
+      z-index: 1000;
+      margin-top: 8px;
+    }
+    .dropdown:hover .dropdown-menu,
+    .dropdown:focus-within .dropdown-menu {
+      opacity: 1;
+      visibility: visible;
+      transform: translateX(-50%) translateY(0);
+    }
+    .dropdown-item {
+      display: block;
+      padding: 10px 16px;
+      margin: 4px 0;
+      color: #856042;
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 14px;
+      transition: background-color .15s ease, color .15s ease;
+      border: 1px solid transparent;
+    }
+    .dropdown-item:hover {
+      background-color: #568a99;
+      color: #f5f5f5;
+      border-color: #446c77;
+    }
+
+    .img-cover{ width:100%; height:100%; object-fit:cover; }
+  </style>
+</head>
+<body class="overflow-x-hidden">
+
+  <!-- NAV -->
+  <nav class="fixed top-0 left-0 w-full bg-paper/90 border-b border-dark-brown/20 z-50 h-16">
+    <div class="max-w-6xl mx-auto px-4 h-16 flex justify-between items-center">
+      <a href="rd.html#hero" class="text-base md:text-lg font-bold text-dark-brown hover:text-primary transition">Home</a>
+      <div class="hidden md:flex items-center gap-6 text-sm font-semibold">
+        <div class="dropdown">
+          <a href="rd.html#about" class="text-dark-brown hover:text-primary">About</a>
+          <div class="dropdown-menu">
+            <a href="rd.html#about" class="dropdown-item">About Us</a>
+            <a href="rd.html#approach" class="dropdown-item">Our Approach</a>
+            <a href="rd.html#testimonials" class="dropdown-item">Testimonials</a>
+          </div>
+        </div>
+        <div class="dropdown">
+          <a href="rd.html#services" class="text-dark-brown hover:text-primary transition">Services</a>
+          <div class="dropdown-menu">
+            <a href="growth_and_engagement.html" class="dropdown-item">Growth & Engagement</a>
+            <a href="data_technology.html" class="dropdown-item">Data & Technology</a>
+            <a href="operations_systems.html" class="dropdown-item">Operations & Systems</a>
+          </div>
+        </div>
+        <a href="rd.html#contact" class="text-dark-brown hover:text-primary">Contact Us</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- SECTION 1: Data & Tech — circles with text revealed under (tabs) -->
+  <section id="dt-hero" class="full">
+    <div class="container px-4 w-full">
+      <div class="max-w-5xl mx-auto text-center">
+        <h1 class="h-title text-3xl md:text-4xl">Data & Technology</h1>
+        <p class="mt-2 max-w-3xl mx-auto">Practical tools and analytics that help teams work smarter, scale effectively, and turn data into impact.</p>
+
+        <div role="tablist" aria-label="Data & Technology options"
+             class="mt-8 grid grid-cols-1 sm:grid-cols-3 gap-10 max-w-3xl mx-auto">
+          <button class="tab group" role="tab" id="tab-1" aria-selected="true" aria-controls="panel-1">
+            <div class="circle"><img src="assets/icons/collaboration.svg" alt=""></div>
+            <div class="tile-title">Collaboration & Time<br/>Management Tools</div>
+          </button>
+          <button class="tab group" role="tab" id="tab-2" aria-selected="false" aria-controls="panel-2" tabindex="-1">
+            <div class="circle"><img src="assets/icons/ai.svg" alt=""></div>
+            <div class="tile-title">AI Integration</div>
+          </button>
+          <button class="tab group" role="tab" id="tab-3" aria-selected="false" aria-controls="panel-3" tabindex="-1">
+            <div class="circle"><img src="assets/icons/dashboard.svg" alt=""></div>
+            <div class="tile-title">Dashboards &<br/>Analytics</div>
+          </button>
+        </div>
+
+        <div class="reveal-panel mt-8 p-6 md:p-8 text-left sm:text-center">
+          <div id="panel-1" role="tabpanel" aria-labelledby="tab-1">
+            <h3 class="text-dark-brown font-semibold">Collaboration & Time Management Tools</h3>
+            <p class="text-sm md:text-base mt-2">
+              Configure project and workflow platforms to
+              <span class="font-semibold text-dark-brown">streamline teamwork</span>, reduce friction, and keep projects on track.
+            </p>
+          </div>
+          <div id="panel-2" role="tabpanel" aria-labelledby="tab-2" hidden>
+            <h3 class="text-dark-brown font-semibold">AI Integration</h3>
+            <p class="text-sm md:text-base mt-2">
+              Integrate <span class="font-semibold text-dark-brown">AI tools</span> for research, writing, and
+              <span class="font-semibold text-dark-brown">workflow automation</span> that saves time and reduces repetitive tasks.
+            </p>
+          </div>
+          <div id="panel-3" role="tabpanel" aria-labelledby="tab-3" hidden>
+            <h3 class="text-dark-brown font-semibold">Dashboards & Analytics</h3>
+            <p class="text-sm md:text-base mt-2">
+              Design simple <span class="font-semibold text-dark-brown">dashboards</span> that turn raw data into
+              <span class="font-semibold text-dark-brown">usable insights</span> your team can rely on to guide decisions.
+            </p>
+          </div>
+        </div>
+
+        <div class="fade-divider"></div>
+      </div>
+
+      <a href="#cta" class="section-arrow" aria-label="Scroll to Asana feature">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+      </a>
+    </div>
+  </section>
+
+  <!-- SECTION 2: Feature – Asana Setup & Documentation -->
+  <!--<section id="asana" class="full">
+    <div class="container px-4 w-full">
+      <div class="max-w-6xl mx-auto">
+        <h3 class="h-title text-[22px] md:text-2xl">Lean Team Solutions: Asana Setup & Documentation</h3>
+        <p class="mt-2 max-w-3xl">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Mauris suscipit, arcu id ultrices feugiat, sapien justo pharetra nibh, consectetur adipiscing, nec facilisis erat elit nec urna.</p>
+
+        <div class="mt-6 grid md:grid-cols-12 gap-6 items-stretch">
+          <div class="md:col-span-5 overflow-hidden rounded-xl ring-8 ring-paper shadow-card">
+            <img src="assets/under-construction-transparent.png" alt="" class="img-cover">
+          </div>
+          <div class="md:col-span-7 feature-pill p-6 md:p-7">
+            <div class="grid sm:grid-cols-2 gap-6">
+              <div>
+                <h4 class="font-semibold text-dark-brown">Deliverables</h4>
+                <ul class="mt-3 space-y-3 text-[.95rem] leading-relaxed text-slate-800">
+                  <li>Deliverable #1 — brief description here.</li>
+                  <li>Deliverable #3 — brief description here.</li>
+                </ul>
+              </div>
+              <div>
+                <h4 class="opacity-0 select-none">Deliverables</h4>
+                <ul class="mt-3 space-y-3 text-[.95rem] leading-relaxed text-slate-800">
+                  <li>Deliverable #2 — brief description here.</li>
+                  <li>Deliverable #4 — brief description here.</li>
+                </ul>
+              </div>
+            </div>
+            <div class="flex justify-center mt-2">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-dark-brown/70" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <a href="#analytics" class="section-arrow" aria-label="Scroll to Analytics feature">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+      </a>
+    </div>
+  </section>
+-->
+  <!-- SECTION 3: Feature – Data Analytics -->
+  <!--<section id="analytics" class="full">
+    <div class="container px-4 w-full">
+      <div class="max-w-6xl mx-auto">
+        <h3 class="h-title text-[22px] md:text-2xl">Data Analytics: hmmmm?</h3>
+        <p class="mt-2 max-w-3xl">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Mauris suscipit, arcu id ultrices feugiat, sapien justo pharetra nibh, nec facilisis erat elit nec urna.</p>
+
+        <div class="mt-6 grid md:grid-cols-12 gap-6 items-stretch">
+          <div class="md:col-span-5 overflow-hidden rounded-xl ring-8 ring-paper shadow-card">
+            <img src="assets/under-construction-transparent.png" alt="" class="img-cover">
+          </div>
+          <div class="md:col-span-7 feature-pill p-6 md:p-7">
+            <div class="grid sm:grid-cols-2 gap-6">
+              <div>
+                <h4 class="font-semibold text-dark-brown">Deliverables</h4>
+                <ul class="mt-3 space-y-3 text-[.95rem] leading-relaxed text-slate-800">
+                  <li>Deliverable #1 — brief description here.</li>
+                  <li>Deliverable #3 — brief description here.</li>
+                </ul>
+              </div>
+              <div>
+                <h4 class="opacity-0 select-none">Deliverables</h4>
+                <ul class="mt-3 space-y-3 text-[.95rem] leading-relaxed text-slate-800">
+                  <li>Deliverable #2 — brief description here.</li>
+                  <li>Deliverable #4 — brief description here.</li>
+                </ul>
+              </div>
+            </div>
+            <div class="flex justify-center mt-2">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-dark-brown/70" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <a href="#cta" class="section-arrow" aria-label="Scroll to CTA">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+      </a>
+    </div>
+  </section>
+-->
+  <!-- SECTION 4: CTA -->
+  <section id="cta" class="full">
+    <div class="container px-4 w-full">
+      <div class="max-w-3xl mx-auto text-center">
+        <img src="assets/landing-icon-transparent.png" alt="" class="mx-auto w-48 md:w-56 opacity-70 mb-3 select-none pointer-events-none" />
+        <h2 class="h-title text-2xl md:text-3xl">Ready to get started?</h2>
+        <a href="rd.html#contact" class="inline-block mt-6 bg-primary text-paper font-semibold px-6 py-3 rounded-lg hover:bg-accent transition active:scale-[.99]">CONTACT US</a>
+        <div class="fade-divider"></div>
+      </div>
+
+      <a href="#dt-hero" class="section-arrow" aria-label="Back to top">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+      </a>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="bg-dark-brown py-8 text-center text-sm text-paper border-t border-secondary/40">
+    <p>© <span id="year"></span> Muro Consulting Services</p>
+  </footer>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Tabs: reveal text under circles (same behavior as Operations)
+    const tabs = Array.from(document.querySelectorAll('.tab[role="tab"]'));
+    const panels = Array.from(document.querySelectorAll('[role="tabpanel"]'));
+
+    function showPanelByTabId(tabId){
+      tabs.forEach(t=>{
+        const selected = t.id === tabId;
+        t.setAttribute('aria-selected', String(selected));
+        t.tabIndex = selected ? 0 : -1;
+      });
+      panels.forEach(p=>{
+        const tab = document.getElementById(tabId);
+        p.hidden = (p.id !== tab.getAttribute('aria-controls'));
+      });
+    }
+
+    tabs.forEach(tab=>{
+      const open = ()=> showPanelByTabId(tab.id);
+      tab.addEventListener('mouseenter', open);
+      tab.addEventListener('focus', open);
+      tab.addEventListener('click', open);
+    });
+
+    showPanelByTabId('tab-1');
+  </script>
+</body>
+</html>

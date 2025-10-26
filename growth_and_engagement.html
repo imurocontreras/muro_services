@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+  <title>Growth & Engagement • Muro Consulting Services</title>
+
+  <link rel="icon" href="assets/favicon.ico?v=3" sizes="any">
+  <link rel="icon" type="image/png" href="assets/favicon-32.png?v=3" sizes="32x32">
+  <link rel="icon" type="image/png" href="assets/favicon-16.png?v=3" sizes="16x16">
+  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png?v=3" sizes="180x180">
+  <meta name="theme-color" content="#f5f5f5">
+
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Poppins:wght@400;600&family=Radley&display=swap" rel="stylesheet"/>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary:'#568a99', accent:'#446c77', secondary:'#c79f7f', paper:'#f5f5f5',
+            'dark-brown':'#856042','dark-grey':'#818c8e'
+          },
+          fontFamily: {
+            montserrat:['Montserrat','sans-serif'],
+            poppins:['Poppins','sans-serif'],
+            radley:['Radley','serif'],
+          },
+          boxShadow:{ card:'0 10px 25px rgba(0,0,0,.07)' },
+          borderRadius:{ bubble:'1.25rem' }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    :root{ --nav-h:64px; }
+    html{ scroll-behavior:smooth; }
+    body{ background:#f5f5f5; color:#818c8e; font-family:'Poppins',sans-serif; }
+
+    section.full{
+      height: calc(100vh - var(--nav-h));
+      min-height: calc(100vh - var(--nav-h));
+      display:flex; align-items:center;
+      position:relative; padding: 0 1rem;
+    }
+    @supports (height: 100svh) {
+      section.full{ height: calc(100svh - var(--nav-h)); min-height: calc(100svh - var(--nav-h)); }
+    }
+
+    nav{ -webkit-backdrop-filter:saturate(1.1) blur(6px); backdrop-filter:saturate(1.1) blur(6px); }
+    .container{ width:100%; max-width:1120px; margin-inline:auto; }
+
+    .section-arrow{ position:absolute; left:50%; bottom:14px; transform:translateX(-50%); opacity:.9; animation:float 3.2s ease-in-out infinite; color:#856042; }
+    @keyframes float{ 0%,100%{ transform:translate(-50%,0)} 50%{transform:translate(-50%,-6px)} }
+    @media (prefers-reduced-motion:reduce){ .section-arrow{ animation:none } }
+
+    .h-title{ font-family:'Montserrat',sans-serif; color:#856042; }
+
+  .circle{ width:200px; height:200px; border-radius:9999px; background:#fff; box-shadow:0 6px 16px rgba(0,0,0,.06); display:flex; align-items:center; justify-content:center; margin-inline:auto; border:1px solid rgba(199,159,127,.35); transition:transform .18s ease; }
+    .circle:focus-visible{ outline:3px solid #568a99; outline-offset:4px; }
+    .tile-title{ color:#856042; font-weight:600; text-align:center; margin-top:.75rem; font-size:.95rem; }
+    .tab[aria-selected="true"] .circle{ transform:translateY(-2px); box-shadow:0 10px 22px rgba(0,0,0,.08); border-color:#c79f7f; }
+
+    .reveal-panel{
+      background:#ffffff; border-radius:16px; border:1px solid rgba(199,159,127,.35);
+      box-shadow:0 8px 22px rgba(0,0,0,.06);
+      overflow:hidden; max-height:0; opacity:0; transform:translateY(6px);
+      transition:max-height .35s ease, opacity .28s ease, transform .28s ease;
+    }
+    #growth-hero.open .reveal-panel{ max-height:999px; opacity:1; transform:none; }
+
+    .fade-divider{ height:1px; background:linear-gradient(90deg,transparent,#c7a288,transparent); max-width:420px; margin:22px auto 0; opacity:.5; }
+
+    /* Dropdown Menu */
+    .dropdown { 
+      position: relative; 
+      display: inline-block;
+    }
+    .dropdown > a {
+      display: block;
+    }
+    .dropdown-menu {
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #f5f5f5;
+      border: 1px solid rgba(133,96,66,.2);
+      border-radius: 12px;
+      box-shadow: 0 8px 25px rgba(0,0,0,.1);
+      padding: 12px;
+      min-width: 200px;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity .2s ease, visibility .2s ease, transform .2s ease;
+      transform: translateX(-50%) translateY(-4px);
+      z-index: 1000;
+      margin-top: 8px;
+    }
+    .dropdown:hover .dropdown-menu,
+    .dropdown:focus-within .dropdown-menu {
+      opacity: 1;
+      visibility: visible;
+      transform: translateX(-50%) translateY(0);
+    }
+    .dropdown-item {
+      display: block;
+      padding: 10px 16px;
+      margin: 4px 0;
+      color: #856042;
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 14px;
+      transition: background-color .15s ease, color .15s ease;
+      border: 1px solid transparent;
+    }
+    .dropdown-item:hover {
+      background-color: #568a99;
+      color: #f5f5f5;
+      border-color: #446c77;
+    }
+
+    .img-cover{ width:100%; height:100%; object-fit:cover; }
+
+    /* Responsive: slightly smaller circles on narrow screens and ensure images fit */
+    @media (max-width: 640px) {
+      .circle { width:140px; height:140px; }
+      .circle img { width:70%; height:auto; }
+    }
+  </style>
+</head>
+<body class="overflow-x-hidden">
+
+  <!-- NAV -->
+    <nav class="fixed top-0 left-0 w-full bg-paper/90 border-b border-dark-brown/20 z-50 h-16">
+    <div class="max-w-6xl mx-auto px-4 h-16 flex justify-between items-center">
+      <a href="rd.html#hero" class="text-base md:text-lg font-bold text-dark-brown hover:text-primary transition">Home</a>
+      <div class="hidden md:flex items-center gap-6 text-sm font-semibold">
+        <div class="dropdown">
+          <a href="rd.html#about" class="text-dark-brown hover:text-primary">About</a>
+          <div class="dropdown-menu">
+            <a href="rd.html#about" class="dropdown-item">About Us</a>
+            <a href="rd.html#approach" class="dropdown-item">Our Approach</a>
+            <a href="rd.html#testimonials" class="dropdown-item">Testimonials</a>
+          </div>
+        </div>
+        <div class="dropdown">
+          <a href="rd.html#services" class="text-dark-brown hover:text-primary transition">Services</a>
+          <div class="dropdown-menu">
+            <a href="growth_and_engagement.html" class="dropdown-item">Growth & Engagement</a>
+            <a href="data_technology.html" class="dropdown-item">Data & Technology</a>
+            <a href="operations_systems.html" class="dropdown-item">Operations & Systems</a>
+          </div>
+        </div>
+        <a href="rd.html#contact" class="text-dark-brown hover:text-primary">Contact Us</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- SECTION 1: HERO + CIRCLES (hover/click reveal) -->
+  <section id="growth-hero" class="full">
+    <div class="container px-4 w-full">
+      <div class="max-w-5xl mx-auto text-center">
+        <h1 class="h-title text-3xl md:text-4xl">Growth & Engagement</h1>
+        <p class="mt-2 text-[15px] md:text-base max-w-2xl mx-auto">
+          Data-informed strategies and clear plans to fuel growth, funding, and engagement.
+        </p>
+
+        <div role="tablist" aria-label="Growth & Engagement options"
+             class="mt-8 grid grid-cols-2 md:grid-cols-4 gap-8">
+          <button class="tab group" role="tab" id="tab-1" aria-selected="true" aria-controls="panel-1">
+            <div class="circle"><img src="assets/prospecting.png" alt="" class="w-40 opacity-90"></div>
+            <!--<div class="tile-title">Prospecting & Funding Strategy</div>-->
+          </button>
+          <button class="tab group" role="tab" id="tab-2" aria-selected="false" aria-controls="panel-2" tabindex="-1">
+            <div class="circle"><img src="assets/campain.png" alt="" class="w-40 opacity-90"></div>
+            <!--<div class="tile-title">Campaigns & Events</div>-->
+          </button>
+          <button class="tab group" role="tab" id="tab-3" aria-selected="false" aria-controls="panel-3" tabindex="-1">
+            <div class="circle"><img src="assets/proposals.png" alt="" class="w-40 opacity-90"></div>
+            <!--<div class="tile-title">Proposals & Pitches</div> -->
+          </button>
+          <button class="tab group" role="tab" id="tab-4" aria-selected="false" aria-controls="panel-4" tabindex="-1">
+            <div class="circle"><img src="assets/stakeholder.png" alt="" class="w-40 opacity-90"></div>
+            <!--<div class="tile-title">Stakeholder Communications</div>-->
+          </button>
+        </div>
+
+        <div class="reveal-panel mt-8 p-6 md:p-8">
+          <div id="panel-1" role="tabpanel" aria-labelledby="tab-1">
+            <h3 class="text-dark-brown font-semibold">Identify Funders</h3>
+            <p class="text-sm md:text-base mt-2">
+              Identify aligned funders, investors, or partners and build practical plans to approach them with
+              <span class="font-semibold text-dark-brown">confidence</span>.
+            </p>
+          </div>
+          <div id="panel-2" role="tabpanel" aria-labelledby="tab-2" hidden>
+            <h3 class="text-dark-brown font-semibold">Plan fundraising activations</h3>
+            <p class="text-sm md:text-base mt-2">
+              Plan fundraising sprints, crowdfunding efforts, or community events that
+              <span class="font-semibold text-dark-brown">mobilize people and generate momentum</span>.
+            </p>
+          </div>
+          <div id="panel-3" role="tabpanel" aria-labelledby="tab-3" hidden>
+            <h3 class="text-dark-brown font-semibold">Develop your case</h3>
+            <p class="text-sm md:text-base mt-2">
+              Produce donor-ready proposals, grants and presentations that strengthen your
+              <span class="font-semibold text-dark-brown">case for support</span>.
+            </p>
+          </div>
+          <div id="panel-4" role="tabpanel" aria-labelledby="tab-4" hidden>
+            <h3 class="text-dark-brown font-semibold">Communication Strategies</h3>
+            <p class="text-sm md:text-base mt-2">
+              Design simple, consistent messaging and stewardship strategies that keep donors, investors, and partners
+              <span class="font-semibold text-dark-brown">engaged</span>.
+            </p>
+          </div>
+        </div>
+        <div class="fade-divider"></div>
+      </div>
+
+      <a href="#grants" class="section-arrow" aria-label="Scroll to Grants">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+      </a>
+    </div>
+  </section>
+
+  <!-- SECTION 2: GRANTS -->
+  <section id="grants" class="full">
+    <div class="container px-4 w-full">
+      <div class="max-w-6xl mx-auto">
+        <div class="text-sm font-bold tracking-widest text-dark-brown">Grants: Funder Research & Proposal Development</div>
+        <h2 class="h-title text-2xl md:text-3xl mt-1">Grants: Funder Research & Proposal Development</h2>
+        <p class="mt-2 max-w-3xl">
+          Successful grants start with the right fit and a strong story. Our Funder Research & Proposal Development package equips your team with targeted prospect research, clear strategies, and competitive proposals — so you can stand out to funders and secure the support you need.
+        </p>
+
+        <div class="mt-8 grid md:grid-cols-12 gap-6 items-stretch">
+          <div class="md:col-span-5 overflow-hidden rounded-xl ring-8 ring-paper shadow-card">
+            <img src="assets/sample_ (2).png" alt="" class="img-cover">
+          </div>
+          <div class="md:col-span-7 grid sm:grid-cols-2 gap-5">
+            <div class="p-5 bg-white border border-secondary/30 rounded-xl shadow-card">
+              <h3 class="text-dark-brown font-semibold">Funder Research & Prospecting</h3>
+              <p class="mt-2 text-sm">In-depth research using premium databases and AI tools, to identify the foundations, corporations, and institutions most aligned with your mission and goals.</p>
+            </div>
+            <div class="p-5 bg-white border border-secondary/30 rounded-xl shadow-card">
+              <h3 class="text-dark-brown font-semibold">Grant Calendar & Strategy</h3>
+              <p class="mt-2 text-sm">A customized roadmap of deadlines, requirements, and priorities — built into systems and workflows that are made to work for you, so nothing falls through the cracks.</p>
+            </div>
+            <div class="p-5 bg-white border border-secondary/30 rounded-xl shadow-card">
+              <h3 class="text-dark-brown font-semibold">Proposal Drafting & Editing</h3>
+              <p class="mt-2 text-sm">Persuasive proposals tailored to funder guidelines, highlighting your strengths, and increasing your chances of securing support.</p>
+            </div>
+            <div class="p-5 bg-white border border-secondary/30 rounded-xl shadow-card">
+              <h3 class="text-dark-brown font-semibold">Supporting Materials Development</h3>
+              <p class="mt-2 text-sm">Budgets, attachments, and case statements — the essentials funders expect, that strengthen your proposal and build funder confidence.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <a href="#campaign" class="section-arrow" aria-label="Scroll to Campaign">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+      </a>
+    </div>
+  </section>
+
+  <!-- SECTION 3: CAMPAIGN -->
+  <section id="campaign" class="full">
+    <div class="container px-4 w-full">
+      <div class="max-w-6xl mx-auto">
+        <div class="text-sm font-bold tracking-widest text-dark-brown">Fundraising Sprint: Campaign Activation</div>
+        <h2 class="h-title text-2xl md:text-3xl mt-1">Fundraising Sprint: Campaign Activation</h2>
+        <p class="mt-2 max-w-3xl">
+          Successful grants start with the right fit and a strong story. Our Funder Research & Proposal Development Package equips your team with  <span class="font-semibold">targeted prospect research, clear strategies, and competitive proposals</span>— so you can stand out to funders and secure the support you need.
+        </p>
+
+        <div class="mt-8 grid md:grid-cols-12 gap-6 items-stretch">
+          <div class="md:col-span-5 overflow-hidden rounded-xl ring-8 ring-paper shadow-card">
+            <img src="assets/sample_ (2).png" alt="" class="img-cover">
+          </div>
+          <div class="md:col-span-7 grid sm:grid-cols-2 gap-5">
+            <div class="p-5 bg-[#edf2f4] border border-accent/20 rounded-xl">
+              <h3 class="text-dark-brown font-semibold">Campaign Strategy Board</h3>
+              <p class="mt-2 text-sm">A clear visual roadmap with goals, KPIs, and outreach strategies.</p>
+            </div>
+            <div class="p-5 bg-[#edf2f4] border border-accent/20 rounded-xl">
+              <h3 class="text-dark-brown font-semibold">Community Engagement Toolkit</h3>
+              <p class="mt-2 text-sm">Talking points, volunteer resources, and concise support scripts.</p>
+            </div>
+            <div class="p-5 bg-[#edf2f4] border border-accent/20 rounded-xl">
+              <h3 class="text-dark-brown font-semibold">Campaign Calendar</h3>
+              <p class="mt-2 text-sm">A tailored plan built into your team’s tools for a cohesive campaign.</p>
+            </div>
+            <div class="p-5 bg-[#edf2f4] border border-accent/20 rounded-xl">
+              <h3 class="text-dark-brown font-semibold">Digital Marketing Resources</h3>
+              <p class="mt-2 text-sm">Polished graphics, captions, emails, and thank-you templates.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <a href="#cta" class="section-arrow" aria-label="Scroll to CTA">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+      </a>
+    </div>
+  </section>
+
+  <!-- SECTION 4: CTA (icon added) -->
+  <section id="cta" class="full">
+    <div class="container px-4 w-full">
+      <div class="max-w-3xl mx-auto text-center">
+        <!-- Transparent icon above heading -->
+        <img src="assets/landing-icon-transparent.png" alt="" class="mx-auto w-48 md:w-56 opacity-70 mb-3 select-none pointer-events-none" />
+        <h2 class="h-title text-2xl md:text-3xl">Ready to get started?</h2>
+        <a href="rd.html#contact" class="inline-block mt-6 bg-primary text-paper font-semibold px-6 py-3 rounded-lg hover:bg-accent transition active:scale-[.99]">CONTACT US</a>
+        <div class="fade-divider"></div>
+      </div>
+
+      <!-- Up arrow back to top -->
+      <a href="#growth-hero" class="section-arrow" aria-label="Back to top">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+      </a>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="bg-dark-brown py-8 text-center text-sm text-paper border-top border-secondary/40">
+    <p>© <span id="year"></span> Muro Consulting Services</p>
+  </footer>
+
+  <script>
+    // Year
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Tabs + hover reveal
+    const hero = document.getElementById('growth-hero');
+    const tabs = Array.from(document.querySelectorAll('.tab[role="tab"]'));
+    const panels = Array.from(document.querySelectorAll('[role="tabpanel"]'));
+
+    function showPanelByTabId(tabId){
+      tabs.forEach(t=>{
+        const selected = t.id === tabId;
+        t.setAttribute('aria-selected', String(selected));
+        t.tabIndex = selected ? 0 : -1;
+      });
+      panels.forEach(p=>{
+        const tab = document.getElementById(tabId);
+        p.hidden = (p.id !== tab.getAttribute('aria-controls'));
+      });
+    }
+
+    tabs.forEach(tab=>{
+      tab.addEventListener('mouseenter', ()=>{
+        hero.classList.add('open');
+        showPanelByTabId(tab.id);
+      });
+      tab.addEventListener('focus', ()=>{
+        hero.classList.add('open');
+        showPanelByTabId(tab.id);
+      });
+      tab.addEventListener('click', ()=>{
+        hero.classList.add('open');
+        showPanelByTabId(tab.id);
+      });
+    });
+
+    hero.addEventListener('mouseleave', ()=> hero.classList.remove('open'));
+    showPanelByTabId('tab-1');
+  </script>
+</body>
+</html>
