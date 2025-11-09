@@ -57,18 +57,33 @@
 
     .h-title{ font-family:'Montserrat',sans-serif; color:#856042; }
 
-  .circle{ width:200px; height:200px; border-radius:9999px; background:#fff; box-shadow:0 6px 16px rgba(0,0,0,.06); display:flex; align-items:center; justify-content:center; margin-inline:auto; border:1px solid rgba(199,159,127,.35); transition:transform .18s ease; }
+    .circle{ width:184px; height:184px; border-radius:9999px; background:#fff; box-shadow:0 8px 22px rgba(0,0,0,.06); display:flex; align-items:center; justify-content:center; margin-inline:auto; border:1px solid rgba(199,159,127,.28); transition:transform .18s ease; overflow:hidden; }
+    /* Make the images appear larger and fill the circular area while preserving aspect ratio */
+    .circle img{
+      width:120px;
+      height:120px;
+      object-fit:cover;
+      border-radius:9999px;
+      opacity:.95;
+      display:block;
+    }
     .circle:focus-visible{ outline:3px solid #568a99; outline-offset:4px; }
     .tile-title{ color:#856042; font-weight:600; text-align:center; margin-top:.75rem; font-size:.95rem; }
     .tab[aria-selected="true"] .circle{ transform:translateY(-2px); box-shadow:0 10px 22px rgba(0,0,0,.08); border-color:#c79f7f; }
 
+    /* Under-circle reveal panel (same pattern as Data & Technology) */
     .reveal-panel{
       background:#ffffff; border-radius:16px; border:1px solid rgba(199,159,127,.35);
       box-shadow:0 8px 22px rgba(0,0,0,.06);
-      overflow:hidden; max-height:0; opacity:0; transform:translateY(6px);
-      transition:max-height .35s ease, opacity .28s ease, transform .28s ease;
+      /* Prepare for transition: visible state */
+      opacity:1; transform:translateY(0); max-height:1000px; overflow:visible;
+      transition:opacity .28s ease, transform .28s ease, max-height .32s ease, padding .28s ease, border-color .18s ease;
     }
-    #growth-hero.open .reveal-panel{ max-height:999px; opacity:1; transform:none; }
+    /* Hidden/closed state: collapse from layout and fade out */
+    .reveal-panel.closed{
+      opacity:0; transform:translateY(-6px); max-height:0; overflow:hidden;
+      padding-top:0; padding-bottom:0; border-color:transparent; box-shadow:none;
+    }
 
     .fade-divider{ height:1px; background:linear-gradient(90deg,transparent,#c7a288,transparent); max-width:420px; margin:22px auto 0; opacity:.5; }
 
@@ -136,25 +151,25 @@
   <!-- NAV -->
     <nav class="fixed top-0 left-0 w-full bg-paper/90 border-b border-dark-brown/20 z-50 h-16">
     <div class="max-w-6xl mx-auto px-4 h-16 flex justify-between items-center">
-      <a href="rd.html#hero" class="text-base md:text-lg font-bold text-dark-brown hover:text-primary transition">Home</a>
+      <a href="index.html#hero" class="text-base md:text-lg font-bold text-dark-brown hover:text-primary transition">Home</a>
       <div class="hidden md:flex items-center gap-6 text-sm font-semibold">
         <div class="dropdown">
-          <a href="rd.html#about" class="text-dark-brown hover:text-primary">About</a>
+          <a href="index.html#about" class="text-dark-brown hover:text-primary">About</a>
           <div class="dropdown-menu">
-            <a href="rd.html#about" class="dropdown-item">About Us</a>
-            <a href="rd.html#approach" class="dropdown-item">Our Approach</a>
-            <a href="rd.html#testimonials" class="dropdown-item">Testimonials</a>
+            <a href="index.html#about" class="dropdown-item">About Us</a>
+            <a href="index.html#approach" class="dropdown-item">Our Approach</a>
+            <a href="index.html#testimonials" class="dropdown-item">Testimonials</a>
           </div>
         </div>
         <div class="dropdown">
-          <a href="rd.html#services" class="text-dark-brown hover:text-primary transition">Services</a>
+          <a href="index.html#services" class="text-dark-brown hover:text-primary transition">Services</a>
           <div class="dropdown-menu">
             <a href="growth_and_engagement.html" class="dropdown-item">Growth & Engagement</a>
             <a href="data_technology.html" class="dropdown-item">Data & Technology</a>
             <a href="operations_systems.html" class="dropdown-item">Operations & Systems</a>
           </div>
         </div>
-        <a href="rd.html#contact" class="text-dark-brown hover:text-primary">Contact Us</a>
+        <a href="index.html#contact" class="text-dark-brown hover:text-primary">Contact Us</a>
       </div>
     </div>
   </nav>
@@ -170,26 +185,26 @@
 
         <div role="tablist" aria-label="Growth & Engagement options"
              class="mt-8 grid grid-cols-2 md:grid-cols-4 gap-8">
-          <button class="tab group" role="tab" id="tab-1" aria-selected="true" aria-controls="panel-1">
-            <div class="circle"><img src="assets/prospecting.png" alt="" class="w-40 opacity-90"></div>
-            <!--<div class="tile-title">Prospecting & Funding Strategy</div>-->
+          <button class="tab group" role="tab" id="tab-1" aria-selected="false" aria-controls="panel-1" tabindex="0">
+            <div class="circle"><img src="assets/Prospecting and Funding Strategy graphic Enhanced.png" alt=""></div>
+            <div class="tile-title">Prospecting & Funding Strategy</div>
           </button>
           <button class="tab group" role="tab" id="tab-2" aria-selected="false" aria-controls="panel-2" tabindex="-1">
-            <div class="circle"><img src="assets/campain.png" alt="" class="w-40 opacity-90"></div>
-            <!--<div class="tile-title">Campaigns & Events</div>-->
+            <div class="circle"><img src="assets/Campaigns and Events graphic Enhanced.png" alt=""></div>
+            <div class="tile-title">Campaigns & Events</div>
           </button>
           <button class="tab group" role="tab" id="tab-3" aria-selected="false" aria-controls="panel-3" tabindex="-1">
-            <div class="circle"><img src="assets/proposals.png" alt="" class="w-40 opacity-90"></div>
-            <!--<div class="tile-title">Proposals & Pitches</div> -->
+            <div class="circle"><img src="assets/Proposals and Pitches graphic Enhanced.png" alt=""></div>
+            <div class="tile-title">Proposals & Pitches</div>
           </button>
           <button class="tab group" role="tab" id="tab-4" aria-selected="false" aria-controls="panel-4" tabindex="-1">
-            <div class="circle"><img src="assets/stakeholder.png" alt="" class="w-40 opacity-90"></div>
-            <!--<div class="tile-title">Stakeholder Communications</div>-->
+            <div class="circle"><img src="assets/Stakeholder Comms graphic Enhanced.png" alt=""></div>
+            <div class="tile-title">Stakeholder Communications</div>
           </button>
         </div>
 
-        <div class="reveal-panel mt-8 p-6 md:p-8">
-          <div id="panel-1" role="tabpanel" aria-labelledby="tab-1">
+        <div id="reveal-panel" class="reveal-panel mt-8 p-6 md:p-8 text-left sm:text-center closed">
+          <div id="panel-1" role="tabpanel" aria-labelledby="tab-1" hidden>
             <h3 class="text-dark-brown font-semibold">Identify Funders</h3>
             <p class="text-sm md:text-base mt-2">
               Identify aligned funders, investors, or partners and build practical plans to approach them with
@@ -316,7 +331,7 @@
         <!-- Transparent icon above heading -->
         <img src="assets/landing-icon-transparent.png" alt="" class="mx-auto w-48 md:w-56 opacity-70 mb-3 select-none pointer-events-none" />
         <h2 class="h-title text-2xl md:text-3xl">Ready to get started?</h2>
-        <a href="rd.html#contact" class="inline-block mt-6 bg-primary text-paper font-semibold px-6 py-3 rounded-lg hover:bg-accent transition active:scale-[.99]">CONTACT US</a>
+        <a href="index.html#contact" class="inline-block mt-6 bg-primary text-paper font-semibold px-6 py-3 rounded-lg hover:bg-accent transition active:scale-[.99]">CONTACT US</a>
         <div class="fade-divider"></div>
       </div>
 
@@ -333,15 +348,31 @@
   </footer>
 
   <script>
-    // Year
     document.getElementById('year').textContent = new Date().getFullYear();
 
-    // Tabs + hover reveal
-    const hero = document.getElementById('growth-hero');
+    // Tabs: reveal text under circles — match Data & Technology behavior, with a short hide delay to avoid jitter
     const tabs = Array.from(document.querySelectorAll('.tab[role="tab"]'));
     const panels = Array.from(document.querySelectorAll('[role="tabpanel"]'));
+    const tablist = document.querySelector('[role="tablist"]');
+    const revealPanel = document.getElementById('reveal-panel');
+
+    let hideTimer = null;
+    function clearHideTimer(){ if(hideTimer){ clearTimeout(hideTimer); hideTimer = null; } }
+
+    function hideAllPanels(){
+      clearHideTimer();
+      tabs.forEach(t=>{ t.setAttribute('aria-selected', 'false'); t.tabIndex = -1; });
+      panels.forEach(p=> p.hidden = true);
+      if(revealPanel) revealPanel.classList.add('closed');
+    }
+
+    function scheduleHideAll(delay = 120){
+      clearHideTimer();
+      hideTimer = setTimeout(hideAllPanels, delay);
+    }
 
     function showPanelByTabId(tabId){
+      clearHideTimer();
       tabs.forEach(t=>{
         const selected = t.id === tabId;
         t.setAttribute('aria-selected', String(selected));
@@ -351,25 +382,41 @@
         const tab = document.getElementById(tabId);
         p.hidden = (p.id !== tab.getAttribute('aria-controls'));
       });
+      if(revealPanel) revealPanel.classList.remove('closed');
     }
 
+    // Open panel while tab is hovered, focused, or clicked
     tabs.forEach(tab=>{
-      tab.addEventListener('mouseenter', ()=>{
-        hero.classList.add('open');
-        showPanelByTabId(tab.id);
-      });
-      tab.addEventListener('focus', ()=>{
-        hero.classList.add('open');
-        showPanelByTabId(tab.id);
-      });
-      tab.addEventListener('click', ()=>{
-        hero.classList.add('open');
-        showPanelByTabId(tab.id);
-      });
+      const open = ()=> showPanelByTabId(tab.id);
+      tab.addEventListener('mouseenter', open);
+      tab.addEventListener('focus', open);
+      tab.addEventListener('click', open);
+      tab.addEventListener('mouseleave', ()=> scheduleHideAll());
     });
 
-    hero.addEventListener('mouseleave', ()=> hero.classList.remove('open'));
-    showPanelByTabId('tab-1');
+    // Keep panel open when pointer moves into it
+    if(revealPanel){
+      revealPanel.addEventListener('mouseenter', clearHideTimer);
+      revealPanel.addEventListener('mouseleave', ()=> scheduleHideAll());
+    }
+
+    // Hide panels when mouse leaves the tablist area (but allow moving into the panel)
+    if(tablist){
+      const area = tablist.parentElement || tablist;
+      area.addEventListener('mouseleave', ()=> scheduleHideAll());
+      area.addEventListener('mouseenter', clearHideTimer);
+    }
+
+    // Hide panels when focus moves outside the tablist or the reveal panel (keyboard users)
+    document.addEventListener('focusin', ()=>{
+      const active = document.activeElement;
+      if(!(tablist && tablist.contains(active)) && !(revealPanel && revealPanel.contains(active))){
+        scheduleHideAll(0);
+      }
+    });
+
+    // Ensure panels are hidden on initial load (no white panel visible until interaction)
+    hideAllPanels();
   </script>
 </body>
 </html>
