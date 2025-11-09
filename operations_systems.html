@@ -140,6 +140,47 @@
     }
 
     .img-cover{ width:100%; height:100%; object-fit:cover; }
+    /* === MOBILE-ONLY ADJUSTMENTS (match Data & Technology / Growth & Engagement) === */
+    @media (max-width:640px){
+      /* Make each full section fill the small viewport and start below the fixed header */
+      section.full{
+        height: 100svh !important;
+        min-height: 100svh !important;
+        padding-top: var(--nav-h);
+        box-sizing: border-box;
+        overflow: hidden;
+      }
+      /* Allow inner container to scroll if content exceeds available area */
+      section.full > .container{
+        max-height: calc(100svh - var(--nav-h) - 24px);
+        overflow: auto;
+        -webkit-overflow-scrolling: touch;
+      }
+      /* Slightly smaller general circles on mobile */
+      .circle{ width:120px; height:120px; }
+      .circle img{ width:56%; height:auto; }
+      /* Specific: shrink circles and tile text inside the Operations hero */
+      #ops-hero .circle{ width:86px !important; height:86px !important; min-width:86px !important; min-height:86px !important; box-sizing:border-box !important; }
+      #ops-hero .circle img{ width:50% !important; height:auto !important; }
+      #ops-hero .tile-title{ font-size: clamp(10px,2.2vw,12px) !important; margin-top:.35rem !important; line-height:1.05; }
+      /* Reduce hero heading and lead paragraph on mobile */
+      #ops-hero .h-title{ font-size: clamp(16px,5.2vw,20px); line-height:1.05; margin-bottom:6px; }
+      #ops-hero .max-w-5xl > p{ font-size: clamp(12px,3.2vw,13px); margin-top:6px; }
+      /* Ensure each tab stacks consistently and circles keep same visual height */
+      #ops-hero [role="tablist"] > .tab{
+        display:flex !important;
+        flex-direction:column !important;
+        align-items:center !important;
+        justify-content:flex-start !important;
+        padding-top: .25rem !important;
+        padding-bottom: .5rem !important;
+      }
+      /* Tighter spacing for the tab grid in the hero */
+      #ops-hero [role="tablist"]{ gap:.6rem !important; }
+      /* Shift CTA content up a bit so button sits higher in the viewport on mobile */
+      #cta .max-w-3xl{ transform: translateY(-0.9rem); }
+      #cta .max-w-3xl a.inline-block{ transform: translateY(-0.6rem); }
+    }
   </style>
 </head>
 <body class="overflow-x-hidden">

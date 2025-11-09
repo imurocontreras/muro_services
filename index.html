@@ -37,14 +37,13 @@
 
   <style>
     :root{
-      --nav-h:64px; /* fixed to prevent CLS/jitter */
-      --svc-gap: 2.25rem;
+      --nav-h:64px;
       --icon-top-crop: 12%;
       --icon-bottom-crop: 10%;
     }
     html{ scroll-behavior:smooth; }
 
-    /* Section snap + fixed height to stop layout shifts */
+    /* SECTION SNAP (desktop behavior preserved) */
     body{ scroll-snap-type:y mandatory; }
     section.section{
       height: calc(100vh - var(--nav-h));
@@ -62,26 +61,20 @@
       }
     }
 
-    /* Bottom arrows with float animation (matches working_website) */
+    /* FLOAT ARROW */
     .section-arrow{
       position:absolute; left:50%; bottom:16px; transform:translateX(-50%);
       opacity:.9; animation:float 3.2s ease-in-out infinite;
     }
-    @keyframes float{
-      0%,100%{ transform:translate(-50%,0) }
-      50%{ transform:translate(-50%,-6px) }
-    }
-    @media (prefers-reduced-motion:reduce){
-      .section-arrow{ animation:none }
-    }
+    @keyframes float{0%,100%{transform:translate(-50%,0)}50%{transform:translate(-50%,-6px)}}
+    @media (prefers-reduced-motion:reduce){.section-arrow{animation:none}}
 
-    /* ---------- HERO ---------- */
+    /* HERO */
     #hero {
       background:
         radial-gradient(80% 60% at 50% 35%, rgba(197,170,148,.12), transparent 60%),
         radial-gradient(40% 20% at 50% 10%, rgba(255,255,255,.65), transparent 70%);
     }
-
     #icon-crop{
       width:clamp(300px,40vw,620px);
       height:clamp(165px,16.5vw,280px);
@@ -91,8 +84,7 @@
     #brand-icon{
       width:100%; height:auto; display:block;
       filter: drop-shadow(0 2px 10px rgba(133,96,66,.12));
-      transform:
-        translateY(calc(var(--icon-bottom-crop) * 1))
+      transform:translateY(calc(var(--icon-bottom-crop) * 1))
         translateY(calc(-1 * var(--icon-top-crop)));
       transform-origin:center;
     }
@@ -100,23 +92,19 @@
       font-family:'Radley',serif; color:#856042;
       font-size:clamp(24px,4vw,48px);
       line-height:1.02;
-      margin-top:-32px; /* lifted */
+      margin-top:-32px;
       letter-spacing:.004em;
-      text-shadow: 0 1px 0 rgba(255,255,255,.25);
+      text-shadow:0 1px 0 rgba(255,255,255,.25);
     }
-    .hero-divider {
-      width: clamp(140px, 18vw, 220px);
-      height: 2px;
-      background: linear-gradient(90deg, transparent, #c79f7f 35%, #c79f7f 65%, transparent);
-      opacity: .9;
-      margin: 8px auto 0;
+    .hero-divider{
+      width:clamp(140px,18vw,220px);
+      height:2px;
+      background:linear-gradient(90deg,transparent,#c79f7f 35%,#c79f7f 65%,transparent);
+      opacity:.9;
+      margin:8px auto 0;
     }
-
-    /* CTA locked under title, lowered with larger top margin */
     #hero-cta{
-      position:relative;
-      display:inline-block;
-      margin-top:4.2rem;           /* ⬅ lower/higher by tweaking this */
+      margin-top:4.2rem;
       font-size:.92rem;
       padding:.5rem 1.1rem;
       border-radius:.5rem;
@@ -124,94 +112,209 @@
       border:1px solid rgba(255,255,255,.15);
     }
 
-    /* Keep stack stable (no translate that could shift on load) */
-    .hero-stack{ 
-      transform:none; 
-      margin-top: 6rem; /* Add space to lower icon and title together */
-    }
-    @media (max-width:640px){
-      .hero-stack{ 
-        transform:none; 
-        margin-top: 4.5rem; /* Slightly less margin on mobile */
-      }
-      #icon-crop{ width:min(86vw,600px); height:min(26vh,240px); }
-      #brand-title{ font-size:clamp(22px,6.2vw,38px); margin-top:-22px; }
-      /* Button remains flow-positioned; adjust if you want it even lower on mobile:
-         #hero-cta{ margin-top:2.6rem; } */
-    }
-
-    /* NAV: fixed height to stop layout shifts */
+    /* NAV */
     nav{ -webkit-backdrop-filter:saturate(1.1) blur(6px); backdrop-filter:saturate(1.1) blur(6px); }
     #site-nav a{ line-height:1; }
 
-    /* Dropdown Menu */
-    .dropdown { 
-      position: relative; 
-      display: inline-block;
-    }
-    .dropdown > a {
-      display: block;
-    }
-    .dropdown-menu {
-      position: absolute;
-      top: 100%;
-      left: 50%;
-      transform: translateX(-50%);
-      background: #f5f5f5;
-      border: 1px solid rgba(133,96,66,.2);
-      border-radius: 12px;
-      box-shadow: 0 8px 25px rgba(0,0,0,.1);
-      padding: 12px;
-      min-width: 200px;
-      opacity: 0;
-      visibility: hidden;
-      transition: opacity .2s ease, visibility .2s ease, transform .2s ease;
-      transform: translateX(-50%) translateY(-4px);
-      z-index: 1000;
-      margin-top: 8px;
+    .dropdown { position:relative; display:inline-block; }
+    .dropdown > a{ display:block; }
+    .dropdown-menu{
+      position:absolute; top:100%; left:50%;
+      transform:translateX(-50%) translateY(-4px);
+      background:#f5f5f5;
+      border:1px solid rgba(133,96,66,.2);
+      border-radius:12px;
+      box-shadow:0 8px 25px rgba(0,0,0,.1);
+      padding:12px;
+      min-width:200px;
+      opacity:0; visibility:hidden;
+      transition:opacity .2s,visibility .2s,transform .2s;
+      z-index:1000;
+      margin-top:8px;
     }
     .dropdown:hover .dropdown-menu,
-    .dropdown:focus-within .dropdown-menu {
-      opacity: 1;
-      visibility: visible;
-      transform: translateX(-50%) translateY(0);
+    .dropdown:focus-within .dropdown-menu{
+      opacity:1; visibility:visible; transform:translateX(-50%) translateY(0);
     }
-    .dropdown-item {
-      display: block;
-      padding: 10px 16px;
-      margin: 4px 0;
-      color: #856042;
-      text-decoration: none;
-      border-radius: 8px;
-      font-weight: 600;
-      font-size: 14px;
-      transition: background-color .15s ease, color .15s ease;
-      border: 1px solid transparent;
+    .dropdown-item{
+      display:block;
+      padding:10px 16px;
+      margin:4px 0;
+      color:#856042;
+      text-decoration:none;
+      border-radius:8px;
+      font-weight:600;
+      font-size:14px;
+      transition:background-color .15s ease,color .15s ease;
+      border:1px solid transparent;
     }
-    .dropdown-item:hover {
-      background-color: #568a99;
-      color: #f5f5f5;
-      border-color: #446c77;
-    }
+    .dropdown-item:hover{ background-color:#568a99;color:#f5f5f5;border-color:#446c77;}
 
-    /* ---------- ABOUT ---------- */
-    .section-inner{ width:100%; max-width:72rem; margin-inline:auto; }
-
-    /* Reveal */
-    .reveal{ opacity:0; transform:translateY(20px); transition:opacity .6s ease, transform .6s ease; }
-    .reveal.show{ opacity:1; transform:none; }
-    .reveal[data-delay="100"]{ transition-delay:.1s } .reveal[data-delay="200"]{transition-delay:.2s} .reveal[data-delay="300"]{transition-delay:.3s}
+    /* Reveal (optional) */
+    .reveal{opacity:0;transform:translateY(20px);transition:opacity .6s ease,transform .6s ease;}
+    .reveal.show{opacity:1;transform:none;}
     @media (prefers-reduced-motion:reduce){
-      .reveal{ opacity:1!important; transform:none!important; transition:none!important; }
+      .reveal{opacity:1!important;transform:none!important;transition:none!important;}
+    }
+
+    /* === MOBILE-ONLY OVERRIDES (desktop unchanged) === */
+    @media (max-width: 640px){
+
+      /* HERO: full screen without About peeking in */
+      #hero.section{
+        height: 100svh !important;
+        min-height: 100svh !important;
+        padding-top: var(--nav-h);
+        overflow: hidden;
+        display:flex;align-items:center;justify-content:center;
+      }
+      #hero > .mx-auto{
+        max-height: calc(100svh - var(--nav-h) - 24px);
+        overflow:auto;
+        -webkit-overflow-scrolling:touch;
+      }
+      #about{ margin-top: 0 !important; }
+
+      /* Make each non-hero section host a scrollable inner area */
+      /* target the first container inside each section */
+      #about > .max-w-6xl,
+      #approach > .max-w-6xl,
+      #services > .max-w-5xl,
+      #testimonials > .max-w-4xl,
+      #contact #contact-inner{
+        max-height: calc(100svh - var(--nav-h) - 24px);
+        overflow: auto;
+        -webkit-overflow-scrolling: touch;
+        padding-block: 8px;
+      }
+
+      /* general section padding to avoid crowding edges */
+      section.section{ padding-block: 12px; }
+
+      /* Hero tweaks for very small phones */
+      .hero-stack{margin-top:1.25rem;}
+      #icon-crop{width:min(86vw,560px);height:min(22vh,200px);}
+      #brand-title{font-size:clamp(20px,6vw,34px);margin-top:-10px;}
+      #hero-cta{margin-top:1rem;}
+
+      /* About sizing and spacing */
+      #about .grid{gap:12px;}
+      #about h2{font-size:1.35rem;}
+      #about p{font-size:.93rem;line-height:1.52;}
+  /* Hide About buttons and image on small screens (mobile only) */
+  #about .btns{margin-top:.75rem; display:none;}
+  #about .about-image{display:none;}
+  /* Ensure testimonials are entirely removed from the mobile rendering (acts like the section doesn't exist) */
+  #testimonials{ display: none !important; visibility: hidden !important; height: 0 !important; overflow: hidden !important; padding: 0 !important; margin: 0 !important; }
+      #about .rounded-full{width:9.5rem!important;height:9.5rem!important;}
+
+      /* Ensure non-hero sections sit below the fixed header on mobile (no overlap) */
+      section.section:not(#hero){
+        padding-top: var(--nav-h);
+        box-sizing: border-box;
+        /* keep the visible area consistent with header accounted for */
+        min-height: calc(100svh - var(--nav-h));
+        height: calc(100svh - var(--nav-h));
+      }
+
+      /* Make About section full-height on mobile (match hero behavior) */
+      #about.section{
+        height: 100svh !important;
+        min-height: 100svh !important;
+        padding-top: var(--nav-h);
+        overflow: hidden;
+      }
+
+      /* Allow the inner content of About to scroll if it exceeds the available area */
+      #about > .max-w-6xl{
+        max-height: calc(100svh - var(--nav-h) - 24px);
+        overflow: auto;
+        -webkit-overflow-scrolling: touch;
+      }
+      /* Make Approach section full-height on mobile (match hero & about behavior) */
+      #approach.section{
+        height: 100svh !important;
+        min-height: 100svh !important;
+        padding-top: var(--nav-h);
+        overflow: hidden;
+      }
+
+      /* Allow inner content of Approach to scroll within available area */
+      #approach > .max-w-6xl{
+        max-height: calc(100svh - var(--nav-h) - 24px);
+        overflow: auto;
+        -webkit-overflow-scrolling: touch;
+      }
+  /* Keep only the Approach heading from the left panel on mobile; hide other left-panel content */
+  #approach .bg-paper > *{ display: none; }
+  #approach .bg-paper > .approach-heading-wrap{ display: block; }
+  /* Keep decorative icon hidden on mobile */
+  #approach .approach-icon{ display: none; }
+    /* Nudge the Approach heading and the brown content up slightly on mobile for tighter spacing */
+    #approach .approach-heading-wrap{ transform: translateY(-0.6rem); }
+    #approach .bg-dark-brown{ transform: translateY(-0.6rem); }
+  /* On mobile show the Collaborative Partnership (1st) and Practical Impact (3rd) subsections */
+  #approach .space-y-6 > div{ display: none; }
+  #approach .space-y-6 > div:first-child,
+  #approach .space-y-6 > div:nth-child(3){ display: block; }
+      /* Approach */
+      #approach .bg-paper{padding:10px 14px!important;}
+      #approach .bg-dark-brown{padding:10px 14px!important;}
+      #approach h2{font-size:1.7rem;line-height:1.1;}
+      #approach h3{font-size:.82rem;letter-spacing:.08em;}
+      #approach p{font-size:.95rem;}
+
+      /* Services */
+      #services h2{font-size:1.45rem;}
+      #services ul{gap:10px;}
+      #services li a{padding:.9rem .9rem;}
+
+      /* Make Services full-height on mobile (match hero/about/approach behavior) */
+      #services.section{
+        height: 100svh !important;
+        min-height: 100svh !important;
+        padding-top: var(--nav-h);
+        overflow: hidden;
+      }
+      /* Disable inner scrolling for Services on mobile so the section itself fills the viewport but its content flows normally */
+      #services > .max-w-5xl{
+        max-height: none;
+        overflow: visible;
+      }
+
+      /* Testimonials & Contact */
+  #testimonials h2{font-size:1.45rem;margin-bottom:.6rem;}
+  /* NOTE: mobile-specific testimonial rules removed during cleanup. Testimonials are now hidden on smaller viewports via responsive markup (desktop remains unchanged).
+     If needed, add new mobile-specific behavior intentionally and explicitly.
+  */
+      #contact h2{font-size:1.45rem;}
+      #contact p{font-size:.95rem;}
+
+      /* Make Contact section full-height on mobile (match hero/about/approach/services behavior) */
+      #contact.section{
+        height: 100svh !important;
+        min-height: 100svh !important;
+        padding-top: var(--nav-h);
+        overflow: hidden;
+      }
+      /* Allow the inner content of Contact to scroll if it exceeds the available area */
+      #contact > #contact-inner{
+        max-height: calc(100svh - var(--nav-h) - 24px);
+        overflow: auto;
+        -webkit-overflow-scrolling: touch;
+      }
     }
   </style>
 </head>
+
 <body class="bg-paper text-dark-grey font-poppins leading-relaxed min-h-screen overflow-x-hidden">
 
-  <!-- NAV (fixed height) -->
+  <!-- NAV -->
   <nav id="site-nav" class="fixed top-0 left-0 w-full bg-paper/90 border-b border-dark-brown/20 z-50 h-16">
     <div class="max-w-6xl mx-auto px-4 h-16 flex justify-between items-center">
       <a href="#hero" class="text-base md:text-lg font-bold text-dark-brown hover:text-primary transition">Home</a>
+
+      <!-- Desktop links -->
       <div class="hidden md:flex items-center gap-6 text-sm font-semibold" id="nav-links">
         <div class="dropdown">
           <a href="#about" class="nav-link text-dark-brown hover:text-primary transition">About</a>
@@ -230,6 +333,25 @@
           </div>
         </div>
         <a href="#contact" class="nav-link text-dark-brown hover:text-primary transition">Contact Us</a>
+      </div>
+
+      <!-- Mobile button -->
+      <button id="menu-toggle" class="md:hidden inline-flex items-center justify-center rounded-md border border-dark-brown/30 px-3 py-2 text-dark-brown">
+        <span class="sr-only">Open menu</span>☰
+      </button>
+    </div>
+
+    <!-- Mobile dropdown -->
+    <div id="mobile-menu" class="md:hidden hidden border-t border-dark-brown/20 bg-paper/95">
+      <div class="max-w-6xl mx-auto px-4 py-3 space-y-2 text-sm font-semibold">
+        <a href="#about" class="block text-dark-brown">About</a>
+        <a href="#services" class="block text-dark-brown">Services</a>
+        <div class="pl-3 space-y-1">
+          <a href="growth_and_engagement.html" class="block text-dark-brown/90">• Growth & Engagement</a>
+          <a href="data_technology.html" class="block text-dark-brown/90">• Data & Technology</a>
+          <a href="operations_systems.html" class="block text-dark-brown/90">• Operations & Systems</a>
+        </div>
+        <a href="#contact" class="block text-dark-brown">Contact Us</a>
       </div>
     </div>
   </nav>
@@ -262,7 +384,7 @@
           <p class="mt-2 text-[15px] md:text-base">
             We help lean teams simplify operations, apply practical technology, and grow with confidence—delivering clear, results-driven solutions designed to last.
           </p>
-          <div class="mt-6 flex flex-col sm:flex-row justify-center md:justify-start gap-4">
+          <div class="btns mt-6 flex flex-col sm:flex-row justify-center md:justify-start gap-4">
             <a href="#approach" class="inline-flex items-center justify-center bg-paper text-dark-brown font-semibold px-6 py-3 rounded-lg border-2 border-primary hover:bg-primary hover:text-paper transition active:scale-[.99] shadow-lg">
               <span>How We Work</span>
               <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -277,14 +399,13 @@
             </a>
           </div>
         </div>
-        <div class="md:col-span-6 flex justify-center md:justify-end">
+        <div class="md:col-span-6 flex justify-center md:justify-end about-image">
           <div class="w-72 h-72 md:w-96 md:h-96 rounded-full overflow-hidden ring-8 ring-paper shadow-card">
             <img src="assets/about_us_icon.jpg" alt="Desert landscape" width="800" height="800" class="w-full h-full object-cover">
           </div>
         </div>
       </div>
     </div>
-
     <a href="#approach" class="section-arrow text-dark-brown/70 hover:text-primary" aria-label="Scroll to Approach">
       <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
     </a>
@@ -294,23 +415,32 @@
   <section id="approach" class="section flex items-center relative">
     <div class="max-w-6xl mx-auto w-full grid md:grid-cols-12">
       <div class="bg-paper md:col-span-5 px-6 md:px-10 py-10 flex items-start md:items-start justify-center md:justify-start">
-        <div class="pt-4">
+        <div class="pt-4 approach-heading-wrap">
           <h2 class="text-4xl md:text-5xl font-montserrat font-bold text-dark-brown text-center md:text-left">Our<br/>Approach</h2>
         </div>
       </div>
       <div class="bg-dark-brown text-paper md:col-span-7 px-6 md:px-10 py-10 flex items-center">
         <div class="space-y-6 max-w-xl mx-auto text-center md:text-left">
-          <div><h3 class="text-sm font-bold tracking-widest">COLLABORATIVE PARTNERSHIP</h3><p class="mt-2 text-paper/90">We step in as a true partner, working with your team to expand capacity and keep momentum moving forward.</p></div>
-          <div><h3 class="text-sm font-bold tracking-widest">INTEGRATED SOLUTIONS</h3><p class="mt-2 text-paper/90">We bridge fundraising, communications, operations, and technology so every effort reinforces the bigger picture.</p></div>
-          <div><h3 class="text-sm font-bold tracking-widest">PRACTICAL IMPACT</h3><p class="mt-2 text-paper/90">Strategies and systems that are clear, usable, and built to make an immediate difference.</p></div>
-          <div><h3 class="text-sm font-bold tracking-widest">BUILT AROUND WHAT MATTERS</h3><p class="mt-2 text-paper/90">Solutions tailored to your goals and context—natural to your team and sustainable over time.</p></div>
+          <div>
+            <h3 class="text-sm font-bold tracking-widest">COLLABORATIVE PARTNERSHIP</h3>
+            <p class="mt-2 text-paper/90">We step in as a true partner, working with your team to expand capacity and keep momentum moving forward.</p>
+          </div>
+          <div>
+            <h3 class="text-sm font-bold tracking-widest">INTEGRATED SOLUTIONS</h3>
+            <p class="mt-2 text-paper/90">We bridge fundraising, communications, operations, and technology so every effort reinforces the bigger picture.</p>
+          </div>
+          <div>
+            <h3 class="text-sm font-bold tracking-widest">PRACTICAL IMPACT</h3>
+            <p class="mt-2 text-paper/90">Strategies and systems that are clear, usable, and built to make an immediate difference.</p>
+          </div>
+          <div>
+            <h3 class="text-sm font-bold tracking-widest">BUILT AROUND WHAT MATTERS</h3>
+            <p class="mt-2 text-paper/90">Solutions tailored to your goals and context—natural to your team and sustainable over time.</p>
+          </div>
         </div>
       </div>
-    </div>
-    
-    <!-- Icon positioned at bottom left -->
-    <img src="assets/landing-icon-transparent.png" class="absolute bottom-4 left-16 w-48 opacity-70" alt="">
-
+  </div>
+  <img src="assets/landing-icon-transparent.png" class="absolute bottom-4 left-16 w-48 opacity-70 approach-icon" alt="">
     <a href="#services" class="section-arrow text-dark-brown/70 hover:text-primary" aria-label="Scroll to Services">
       <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
     </a>
@@ -334,7 +464,8 @@
   </section>
 
   <!-- TESTIMONIALS -->
-  <section id="testimonials" class="section flex items-center">
+  <!-- Wrapped with responsive utilities so testimonials are desktop-only (hidden on small viewports). -->
+  <section id="testimonials" class="section hidden md:flex items-center">
     <div class="max-w-4xl mx-auto px-4 w-full text-center">
       <h2 class="text-2xl md:text-3xl font-montserrat font-bold text-dark-brown mb-6">Testimonials</h2>
       <div class="space-y-6">
@@ -380,22 +511,18 @@
   <script>
     document.getElementById('year').textContent = new Date().getFullYear();
 
-    // Active link highlight
-    const sections = document.querySelectorAll("section.section, section#hero");
-    const navLinks = document.querySelectorAll(".nav-link");
-    window.addEventListener("scroll", () => {
-      let current = "";
-      sections.forEach(section => {
-        const top = section.offsetTop - 160;
-        if (window.scrollY >= top) current = section.getAttribute("id");
+    // Mobile menu open/close + auto-close on selection/hash change
+    const btn = document.getElementById('menu-toggle');
+    const mm  = document.getElementById('mobile-menu');
+    if(btn && mm){
+      btn.addEventListener('click', ()=> mm.classList.toggle('hidden'));
+      mm.querySelectorAll('a').forEach(a=>{
+        a.addEventListener('click', ()=> mm.classList.add('hidden'));
       });
-      navLinks.forEach(link => {
-        link.classList.remove("text-primary");
-        if (link.getAttribute("href").includes(current)) link.classList.add("text-primary");
-      });
-    });
+      window.addEventListener('hashchange', ()=> mm.classList.add('hidden'));
+    }
 
-    // Reveal animations
+    // Optional: reveal animation handling
     const observer = new IntersectionObserver((entries)=>{
       entries.forEach(e=>{
         if(e.isIntersecting){ e.target.classList.add('show'); observer.unobserve(e.target); }
@@ -404,7 +531,7 @@
     document.querySelectorAll('.reveal').forEach(el=>observer.observe(el));
   </script>
 
-  <!-- Contact Form Submission -->
+  <!-- Contact Form (simple POST handler) -->
   <script>
     (function(){
       const form = document.getElementById('contact-form');
@@ -426,19 +553,10 @@
           const formData = new FormData(form);
           const btn = form.querySelector('button[type="submit"]');
           btn.disabled = true; btn.textContent = 'Sending...';
-          const controller = new AbortController();
-          const timer = setTimeout(()=>controller.abort(), 15000);
           try{
-            const resp = await fetch(apiUrl,{ method:'POST', body:formData, signal:controller.signal });
-            clearTimeout(timer);
-            let data, text;
-            try{ data = await resp.json(); }catch(_){ text = await resp.text(); }
-            if(!resp.ok){
-              const msg = (data && data.error) ? data.error : (text || `HTTP ${resp.status}`);
-              throw new Error(msg);
-            }
-            const ok = data && data.success === true;
-            if(ok){ setStatus('Message sent successfully!', true); form.reset(); }
+            const resp = await fetch(apiUrl,{ method:'POST', body:formData });
+            const data = await resp.json().catch(()=>({}));
+            if(resp.ok && data && data.success){ setStatus('Message sent successfully!', true); form.reset(); }
             else { throw new Error((data && data.error) ? data.error : 'Could not send message.'); }
           }catch(err){
             setStatus(`Network or server error: ${err.message || err}`, false);
@@ -449,5 +567,28 @@
       }
     })();
   </script>
+
+    <!-- Mobile-only adjustments: change Services down-arrow target to Contact on small screens -->
+    <script>
+      (function(){
+        const arrowSelector = '#services a.section-arrow';
+        function updateServicesArrow(){
+          const arrow = document.querySelector(arrowSelector);
+          if(!arrow) return;
+          const isMobile = window.matchMedia('(max-width:640px)').matches;
+          if(isMobile){
+            arrow.setAttribute('href','#contact');
+            arrow.setAttribute('aria-label','Scroll to Contact');
+          } else {
+            arrow.setAttribute('href','#testimonials');
+            arrow.setAttribute('aria-label','Scroll to Testimonials');
+          }
+        }
+        function debounce(fn, wait){ let t; return function(){ clearTimeout(t); t = setTimeout(fn, wait); }; }
+        updateServicesArrow();
+        window.addEventListener('resize', debounce(updateServicesArrow, 120));
+        window.addEventListener('orientationchange', updateServicesArrow);
+      })();
+    </script>
 </body>
 </html>

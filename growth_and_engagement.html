@@ -143,6 +143,54 @@
     @media (max-width: 640px) {
       .circle { width:140px; height:140px; }
       .circle img { width:70%; height:auto; }
+  /* Tighter typography and spacing to ensure content fits within a single mobile viewport */
+  .h-title{ font-size: clamp(18px, 5.5vw, 22px); }
+  /* Specifically reduce Growth Hero heading and its lead paragraph on mobile only (desktop unchanged) */
+  #growth-hero .h-title { font-size: clamp(16px, 5.2vw, 20px); line-height: 1.05; margin-bottom: 6px; }
+  #growth-hero .max-w-5xl > p { font-size: clamp(12px, 3.2vw, 13px); margin-top: 6px; }
+      .h-title + p, .h-title + p + .mt-8{ margin-top: .45rem; }
+      p, .tile-title{ font-size: clamp(12px, 2.6vw, 14px); }
+      .tile-title{ margin-top:.5rem; }
+      .container{ padding-left: .5rem; padding-right:.5rem; }
+      .max-w-5xl, .max-w-6xl, .max-w-3xl{ max-width: 92vw; }
+      /* Mobile-specific: hide Grants and Campaign sections so mobile jumps from hero to CTA
+         and disable circle hover/selection animations and the reveal textboxes. */
+      #grants, #campaign { display: none !important; visibility: hidden !important; height: 0 !important; overflow: hidden !important; padding: 0 !important; margin: 0 !important; }
+      /* Remove the reveal panel (textboxes) on mobile */
+      #reveal-panel { display: none !important; visibility: hidden !important; height: 0 !important; overflow: hidden !important; }
+      /* Disable circle hover/selection animations on mobile */
+      .circle { transition: none !important; transform: none !important; }
+      .tab[aria-selected="true"] .circle { transform: none !important; box-shadow: none !important; border-color: rgba(199,159,127,.28) !important; }
+      /* Prevent accidental focus/hover visual changes */
+      .tab:focus .circle, .tab:hover .circle { transform: none !important; }
+      /* Ensure each section begins below the fixed header and fills the mobile viewport (use svh for mobile) */
+      section.full{
+        height: 100svh !important;
+        min-height: 100svh !important;
+        padding-top: var(--nav-h);
+        box-sizing: border-box;
+        overflow: hidden;
+      }
+      /* Make the main container in each section scrollable when content exceeds the available area */
+      section.full > .container{
+        max-height: calc(100svh - var(--nav-h) - 24px);
+        overflow: auto;
+        -webkit-overflow-scrolling: touch;
+      }
+  /* Shrink circles a bit more to ensure everything fits comfortably on smaller phones */
+  .circle { width:110px; height:110px; }
+  .circle img { width:56%; height:auto; }
+  /* Further reduce circles and tile text inside the growth hero only (mobile only) */
+  #growth-hero .circle { width:86px !important; height:86px !important; }
+  #growth-hero .circle img { width:50% !important; height:auto !important; }
+  #growth-hero .tile-title{ font-size: clamp(10px, 2.2vw, 12px) !important; margin-top:.35rem !important; }
+  /* Tighten spacing for the tab grid inside the hero so tiles fit on one row where possible */
+  #growth-hero [role="tablist"]{ gap: .6rem !important; }
+      /* Reduce padding inside reveal panel area (hidden already) and other blocks to avoid overflow */
+      .reveal-panel, .p-5, .mt-8 { padding: 6px !important; margin-top: .5rem !important; }
+      /* Shift CTA content up a bit so button sits higher in the viewport on mobile */
+      #cta .max-w-3xl{ transform: translateY(-0.9rem); }
+      #cta .max-w-3xl a.inline-block{ transform: translateY(-0.6rem); }
     }
   </style>
 </head>
@@ -171,9 +219,9 @@
         </div>
         <a href="index.html#contact" class="text-dark-brown hover:text-primary">Contact Us</a>
       </div>
+      
     </div>
-  </nav>
-
+    </nav> 
   <!-- SECTION 1: HERO + CIRCLES (hover/click reveal) -->
   <section id="growth-hero" class="full">
     <div class="container px-4 w-full">
@@ -417,6 +465,31 @@
 
     // Ensure panels are hidden on initial load (no white panel visible until interaction)
     hideAllPanels();
+  </script>
+  
+  <!-- Mobile-only: make each section-arrow navigate to the next visible section (skip hidden ones) -->
+  <script>
+    (function(){
+      const mq = window.matchMedia('(max-width:640px)');
+      function updateArrows(){
+        if(!mq.matches) return; // desktop: leave as-is
+        const sections = Array.from(document.querySelectorAll('section[id]'));
+        const visible = sections.filter(s=>{
+          const cs = getComputedStyle(s);
+          return cs.display !== 'none' && cs.visibility !== 'hidden' && s.offsetHeight > 0;
+        });
+        visible.forEach((s,i)=>{
+          const arrow = s.querySelector('a.section-arrow');
+          if(!arrow) return;
+          const next = visible[i+1];
+          if(next) arrow.setAttribute('href','#'+next.id);
+        });
+      }
+      function debounce(fn, wait){ let t; return function(){ clearTimeout(t); t = setTimeout(fn, wait); }; }
+      document.addEventListener('DOMContentLoaded', updateArrows);
+      window.addEventListener('resize', debounce(updateArrows, 120));
+      window.addEventListener('orientationchange', updateArrows);
+    })();
   </script>
 </body>
 </html>
