@@ -1,6 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-0SCW2LYFQM"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-0SCW2LYFQM');
+</script>
+
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
   <title>Muro Consulting Services</title>
@@ -438,7 +448,7 @@
               </svg>
             </a>
             <a href="#testimonials" class="inline-flex items-center justify-center bg-paper text-dark-brown font-semibold px-6 py-3 rounded-lg border-2 border-primary hover:bg-primary hover:text-paper transition active:scale-[.99] shadow-lg">
-              <span>Client Feedback</span>
+              <span>Testimonials</span>
               <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
               </svg>
@@ -614,22 +624,53 @@
     (function(){
       const form = document.getElementById('contact-form');
       const apiUrl = 'https://murorangel-backend-a6bjdwhwahcfggf3.canadacentral-01.azurewebsites.net/contact';
-      function setStatus(text, ok){
+
+      function createStatusContainer(){
         let statusDiv = document.getElementById('form-status');
         if(!statusDiv){
           statusDiv = document.createElement('div');
-          statusDiv.id='form-status';
+          statusDiv.id = 'form-status';
           form.insertAdjacentElement('afterend', statusDiv);
         }
-        statusDiv.textContent = text;
-        statusDiv.className = 'mt-4 text-center ' + (ok ? 'text-green-600' : 'text-red-600');
+        return statusDiv;
       }
+
+      function setStatus(text, ok){
+        const container = createStatusContainer();
+        const base = 'mt-4 mx-auto max-w-xl p-4 flex items-start gap-3 rounded-bubble shadow-card border';
+        const visual = ok ? 'bg-paper border-green-200' : 'bg-paper border-red-200';
+        const iconColor = ok ? 'text-green-600' : 'text-red-600';
+
+        const iconSVG = ok
+          ? `<svg class="w-5 h-5 ${iconColor} flex-shrink-0" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414L8.414 15l-4.121-4.121a1 1 0 111.414-1.414L8.414 12.172l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>`
+          : `<svg class="w-5 h-5 ${iconColor} flex-shrink-0" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11V5a1 1 0 10-2 0v2a1 1 0 102 0zm0 6a1 1 0 11-2 0 1 1 0 012 0z" clip-rule="evenodd"/></svg>`;
+
+        container.innerHTML = `
+          <div class="${base} ${visual}" role="alert" aria-live="polite">
+            ${iconSVG}
+            <div class="text-sm text-dark-brown leading-tight">${text}</div>
+            <button type="button" class="ml-auto text-dark-brown/60 hover:text-dark-brown status-dismiss" aria-label="Dismiss message">
+              <svg class="w-4 h-4" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
+            </button>
+          </div>
+        `;
+
+        const btn = container.querySelector('.status-dismiss');
+        if (btn) btn.addEventListener('click', ()=> container.remove());
+
+        // Auto-dismiss success after a short delay
+        if(ok){
+          setTimeout(()=>{ if(document.getElementById('form-status')) document.getElementById('form-status').remove(); }, 6000);
+        }
+      }
+
       if(form){
         form.addEventListener('submit', async function(e){
           e.preventDefault();
           if(!form.reportValidity()) return;
           const formData = new FormData(form);
           const btn = form.querySelector('button[type="submit"]');
+          const originalLabel = btn.textContent;
           btn.disabled = true; btn.textContent = 'Sending...';
           try{
             const resp = await fetch(apiUrl,{ method:'POST', body:formData });
@@ -639,7 +680,7 @@
           }catch(err){
             setStatus(`Network or server error: ${err.message || err}`, false);
           }finally{
-            btn.disabled = false; btn.textContent = 'Send Message';
+            btn.disabled = false; btn.textContent = originalLabel;
           }
         });
       }
