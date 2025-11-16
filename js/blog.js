@@ -16,6 +16,16 @@ function createExcerpt(html, maxLength = 220) {
   return cleaned.slice(0, maxLength).trim() + '…';
 }
 
+// Escape HTML for small text fields (used before inserting into templates)
+function escapeHtml(str) {
+  return String(str || '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
 // Estimate reading time (in minutes) from HTML content
 function estimateReadingTime(html) {
   const text = getPlainText(html);
@@ -181,6 +191,29 @@ function openBlogModal(post, meta) {
        </p>`
     : '';
 
+  // Render and sanitize the post content (Markdown -> HTML)
+  const rawContent = post.content || '';
+  let renderedContent = rawContent;
+  try {
+    if (typeof marked !== 'undefined' && rawContent) {
+      renderedContent = marked.parse(rawContent);
+    }
+  } catch (e) {
+    console.warn('marked.parse error', e);
+    renderedContent = rawContent;
+  }
+
+  try {
+    if (typeof DOMPurify !== 'undefined') {
+      renderedContent = DOMPurify.sanitize(renderedContent);
+    }
+  } catch (e) {
+    console.warn('DOMPurify.sanitize error', e);
+  }
+
+  const authorHtml = post.author ? `<p class="text-sm text-dark-grey/80 mt-4 text-right">By ${escapeHtml(post.author)}</p>` : '';
+  const dateHtml = dateText ? `<p class="text-xs text-dark-grey/70 mt-1 text-right">${escapeHtml(dateText)}</p>` : '';
+
   const openInNewPageHtml = slugParam
     ? `
       <div class="mt-3 mb-4">
@@ -230,19 +263,23 @@ function openBlogModal(post, meta) {
   content.innerHTML = `
     <div class="mb-3">
       <p class="text-[0.72rem] font-semibold tracking-[0.16em] uppercase text-primary mb-1">
-        ${categoryText}
+        ${escapeHtml(categoryText)}
       </p>
       ${tagsHtml}
     </div>
     <h2 id="blog-modal-title" class="text-2xl md:text-3xl font-semibold mb-1 text-dark-brown">
-      ${post.title}
+      ${escapeHtml(post.title)}
     </h2>
     <p class="text-xs md:text-sm text-dark-grey">
-      ${[dateText, readTimeText].filter(Boolean).join(' • ')}
+      ${readTimeText || ''}
     </p>
     ${openInNewPageHtml}
     <div class="prose max-w-none text-[0.95rem] leading-relaxed text-dark-grey">
-      ${post.content}
+      ${renderedContent}
+    </div>
+    <div class="mt-4">
+      ${authorHtml}
+      ${dateHtml}
     </div>
     ${relatedHtml}
   `;
@@ -399,17 +436,19 @@ function renderPosts() {
     const readTime = estimateReadingTime(post.content || '');
     const categoryLabel = post.category || 'Insight';
     const tags = Array.isArray(post.tags) ? post.tags.filter(Boolean) : [];
+    // In grid (cards) we hide author — author is shown only in modal/single post view.
+    const authorLine = '';
 
     wrapper.innerHTML = `
       <div class="flex flex-col h-full">
-        <div class="mb-3">
+          <div class="mb-3">
           <span class="inline-flex items-center px-2.5 py-1 rounded-full bg-primary/10 border border-primary/40 text-[0.7rem] font-semibold tracking-[0.14em] uppercase text-primary">
-            ${categoryLabel}
+            ${escapeHtml(categoryLabel)}
           </span>
         </div>
 
         <h2 class="text-lg md:text-xl font-semibold mb-1 text-dark-brown">
-          ${post.title}
+          ${escapeHtml(post.title)}
         </h2>
 
         <p class="text-[0.75rem] text-dark-grey mb-2">
@@ -427,6 +466,8 @@ function renderPosts() {
         <p class="text-sm text-dark-grey/95 flex-1">
           ${excerpt}
         </p>
+
+        ${authorLine}
 
         <p class="mt-3 text-[0.72rem] uppercase tracking-[0.16em] text-primary font-semibold">
           Open full insight
@@ -469,7 +510,7 @@ async function loadPosts() {
   try {
     const { data, error } = await window.supabaseClient
       .from('posts')
-      .select('title, slug, content, published_at, category, tags, is_published')
+      .select('title, slug, content, published_at, category, tags, author, is_published')
       .eq('is_published', true)
       .order('published_at', { ascending: false });
 

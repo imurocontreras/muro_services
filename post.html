@@ -109,6 +109,8 @@
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="./js/supabaseClient.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/dompurify@2.4.0/dist/purify.min.js"></script>
 </head>
 <body class="overflow-x-hidden">
 
@@ -199,6 +201,10 @@
             </header>
 
             <section id="post-content" class="prose max-w-none text-[0.95rem] leading-relaxed text-dark-grey"></section>
+            <div class="mt-6 border-t border-dark-brown/10 pt-4">
+              <p id="post-author" class="text-sm text-dark-grey/80 text-right"></p>
+              <p id="post-date" class="text-xs text-dark-grey/70 mt-1 text-right"></p>
+            </div>
 
             <!-- Prev / Next -->
             <nav id="post-nav" class="mt-8 pt-5 border-t border-dark-brown/15 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 text-sm">
@@ -449,9 +455,9 @@
       }
 
       try {
-        const { data, error } = await window.supabaseClient
-          .from('posts')
-          .select('title, slug, content, published_at, category, tags, is_published')
+            const { data, error } = await window.supabaseClient
+              .from('posts')
+              .select('title, slug, content, published_at, category, tags, author, is_published')
           .eq('slug', slug)
           .eq('is_published', true)
           .maybeSingle();
@@ -469,18 +475,46 @@
         const post = data;
         const dateText = formatSupabaseDate(post.published_at);
         const readTimeText = estimateReadingTime(post.content || '');
-        const metaParts = [dateText, readTimeText].filter(Boolean);
 
         document.getElementById('post-title').textContent = post.title || '';
         document.getElementById('post-category').textContent = post.category || 'Insight';
+        document.getElementById('post-author').textContent = post.author || '';
 
         const tags = Array.isArray(post.tags) ? post.tags.filter(Boolean) : [];
         document.getElementById('post-tags').innerHTML = tags.length
           ? tags.map(t => `<span class="inline-block mr-1">#${t}</span>`).join('')
           : '';
 
-        document.getElementById('post-meta').textContent = metaParts.join(' • ');
-        document.getElementById('post-content').innerHTML = post.content || '';
+        // Top meta shows only read time; the date will be shown below the author
+        document.getElementById('post-meta').textContent = readTimeText || '';
+
+        // Render Markdown -> HTML and sanitize. If `marked`/`DOMPurify` are unavailable, fall back to raw content.
+        (function renderContent() {
+          const raw = post.content || '';
+          let rendered = raw;
+          try {
+            if (typeof marked !== 'undefined' && raw) {
+              rendered = marked.parse(raw);
+            }
+          } catch (e) {
+            console.warn('marked parse failed, using raw content', e);
+            rendered = raw;
+          }
+
+          try {
+            if (typeof DOMPurify !== 'undefined') {
+              rendered = DOMPurify.sanitize(rendered);
+            }
+          } catch (e) {
+            console.warn('DOMPurify sanitize failed, using un-sanitized content', e);
+          }
+
+          document.getElementById('post-content').innerHTML = rendered;
+        })();
+
+        // Set the date under the author (right-aligned)
+        const dateEl = document.getElementById('post-date');
+        if (dateEl) dateEl.textContent = dateText || '';
 
         if (loadingEl) loadingEl.classList.add('hidden');
         if (articleEl) articleEl.classList.remove('hidden');
