@@ -14,112 +14,42 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
   <title>Insights • Muro Consulting Services</title>
 
-  <!-- Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com"/>
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <link rel="icon" href="assets/favicon.ico?v=3" sizes="any">
+  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png?v=3" sizes="180x180">
+  <meta name="theme-color" content="#f5f5f5">
 
-  <!-- Tailwind CDN (for utility classes) -->
-  <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+  <!-- Fonts / Tailwind (same as service pages) -->
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Poppins:wght@400;600&display=swap" rel="stylesheet"/>
+  <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
       theme: {
         extend: {
-          colors: {
-            paper: '#F7F2EC',
-            'paper-soft': '#f2ebe3',
-            primary: '#856042',
-            accent: '#568a99',
-            'accent-soft': '#e4f1f5',
-            'dark-brown': '#3f2a1e',
-            'dark-grey': '#4b5563',
-            'muted-brown': '#b89a7c',
+          colors:{
+            primary:'#568a99',
+            accent:'#446c77',
+            secondary:'#c79f7f',
+            paper:'#f5f5f5',
+            'dark-brown':'#856042',
+            'dark-grey':'#818c8e'
           },
-          boxShadow: {
-            card: '0 14px 40px rgba(15, 23, 42, 0.14)',
+          fontFamily:{
+            montserrat:['Montserrat','sans-serif'],
+            poppins:['Poppins','sans-serif']
           },
-        },
-      },
-    };
+          boxShadow:{ card:'0 10px 25px rgba(0,0,0,.07)' }
+        }
+      }
+    }
   </script>
 
   <style>
-    /* Base styles */
-    body {
-      font-family: 'Poppins', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      background: radial-gradient(circle at top left, #fdf7ef 0, #f7f2ec 45%, #f3ece4 100%);
-      color: #111827;
+    html{ scroll-behavior:smooth; }
+    body{
+      background:#f5f5f5;
+      color:#818c8e;
+      font-family:'Poppins',sans-serif;
     }
-
-    .no-scroll {
-      overflow: hidden;
-    }
-
-    .gradient-border {
-      border-image: linear-gradient(90deg, rgba(133,96,66,0.7), rgba(86,138,153,0.7)) 1;
-    }
-
-    .tag-pill {
-      border-radius: 999px;
-      border: 1px solid rgba(133,96,66,0.25);
-      background: rgba(255,255,255,0.85);
-      backdrop-filter: blur(6px);
-    }
-
-    .tag-pill.active {
-      background: #856042;
-      color: #fdf7ef;
-      border-color: transparent;
-    }
-
-    .tag-pill:hover {
-      border-color: rgba(133,96,66,0.6);
-    }
-
-    .badge-category {
-      background: rgba(247, 242, 236, 0.9);
-      border-radius: 999px;
-      border: 1px solid rgba(133,96,66,0.3);
-    }
-
-    .shadow-card {
-      box-shadow: 0 18px 45px rgba(17, 24, 39, 0.16);
-    }
-
-    /* Scrollbar subtle styling */
-    ::-webkit-scrollbar {
-      width: 8px;
-      height: 8px;
-    }
-    ::-webkit-scrollbar-track {
-      background: transparent;
-    }
-    ::-webkit-scrollbar-thumb {
-      background: rgba(148, 163, 184, 0.5);
-      border-radius: 999px;
-    }
-    ::-webkit-scrollbar-thumb:hover {
-      background: rgba(148, 163, 184, 0.8);
-    }
-
-    /* Modal backdrop */
-    #blog-modal-backdrop {
-      background: rgba(15, 23, 42, 0.45);
-      backdrop-filter: blur(8px);
-    }
-
-    /* Focus ring for accessibility */
-    .focus-ring {
-      outline: 2px solid transparent;
-      outline-offset: 2px;
-      box-shadow: 0 0 0 2px rgba(86,138,153,0.45);
-    }
-
-    /* Mobile nav overlay */
-    .mobile-nav-open {
-      overflow: hidden;
-    }
-
     nav{
       -webkit-backdrop-filter:saturate(1.1) blur(6px);
       backdrop-filter:saturate(1.1) blur(6px);
@@ -150,29 +80,15 @@
       background: #f5f5f5;
       border: 1px solid rgba(133,96,66,.2);
       border-radius: 12px;
-      min-width: 210px;
-      box-shadow: 0 12px 40px rgba(15,23,42,0.22);
+      box-shadow: 0 8px 25px rgba(0,0,0,.1);
+      padding: 12px;
+      min-width: 200px;
       opacity: 0;
       visibility: hidden;
-      transform-origin: top center;
-      transition:
-        opacity 150ms ease,
-        visibility 150ms ease,
-        transform 150ms ease;
-      transform: translateX(-50%) translateY(6px);
-      z-index: 40;
-    }
-    .dropdown-menu a{
-      display:block;
-      padding: 8px 14px;
-      font-size: 0.85rem;
-      color: #374151;
-      text-decoration: none;
-      white-space: nowrap;
-    }
-    .dropdown-menu a:hover{
-      background:#e4f1f5;
-      color:#111827;
+      transition: opacity .2s ease, visibility .2s ease, transform .2s ease;
+      transform: translateX(-50%) translateY(-4px);
+      z-index: 1000;
+      margin-top: 8px;
     }
     .dropdown:hover .dropdown-menu,
     .dropdown:focus-within .dropdown-menu{
@@ -180,129 +96,36 @@
       visibility: visible;
       transform: translateX(-50%) translateY(0);
     }
-
-    /* Mobile nav drawer */
-    .mobile-menu{
-      position: fixed;
-      inset: 0;
-      z-index: 60;
-      background: rgba(15,23,42,0.6);
-      display:none;
-    }
-    .mobile-menu.open{
+    .dropdown-item{
       display:block;
+      padding:10px 16px;
+      margin:4px 0;
+      color:#856042;
+      text-decoration:none;
+      border-radius:8px;
+      font-weight:600;
+      font-size:14px;
+      transition: background-color 0.15s ease, color 0.15s ease;
+      border:1px solid transparent;
     }
-    .mobile-menu-panel{
-      background:#f7f2ec;
-      width: 85%;
-      max-width:320px;
+    .dropdown-item:hover{
+      background-color:#568a99;
+      color:#f5f5f5;
+      border-color:#446c77;
+    }
+
+    /* Scroll lock when modal open */
+    .no-scroll{
+      overflow:hidden;
       height:100%;
-      box-shadow: 0 24px 60px rgba(15,23,42,0.3);
-      transform: translateX(-100%);
-      transition: transform 180ms ease-out;
-    }
-    .mobile-menu.open .mobile-menu-panel{
-      transform: translateX(0);
     }
 
-    /* Markdown-style content (“prose”) */
-    .prose {
-      font-size: 0.95rem;
-      line-height: 1.8;
-      color: #4b5563;
+    /* Modal tweak for small screens */
+    @media (max-width:640px){
+      #blog-modal .modal-inner{
+        max-height:80vh;
+      }
     }
-
-    .prose > * + * {
-      margin-top: 1rem;
-    }
-
-    .prose h1,
-    .prose h2,
-    .prose h3,
-    .prose h4 {
-      color: #856042;
-      font-family: 'Montserrat', sans-serif;
-      font-weight: 700;
-      line-height: 1.3;
-    }
-
-    .prose h1 { font-size: 1.65rem; margin-top: 0.5rem; }
-    .prose h2 { font-size: 1.4rem; }
-    .prose h3 { font-size: 1.1rem; text-transform: none; }
-
-    .prose p {
-      margin-top: 0.9rem;
-    }
-
-    .prose a {
-      color: #568a99;
-      text-decoration: underline;
-      text-underline-offset: 2px;
-    }
-
-    .prose a:hover {
-      color: #446c77;
-    }
-
-    .prose ul,
-    .prose ol {
-      padding-left: 1.2rem;
-      margin-top: 0.75rem;
-    }
-
-    .prose ul {
-      list-style-type: disc;
-    }
-
-    .prose ol {
-      list-style-type: decimal;
-    }
-
-    .prose li + li {
-      margin-top: 0.3rem;
-    }
-
-    .prose blockquote {
-      border-left: 3px solid #c79f7f;
-      padding-left: 0.9rem;
-      color: #4b5563;
-      font-style: italic;
-    }
-
-    .prose code {
-      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
-        "Liberation Mono", "Courier New", monospace;
-      font-size: 0.85em;
-      background: rgba(0, 0, 0, 0.03);
-      padding: 0.15rem 0.35rem;
-      border-radius: 0.25rem;
-    }
-
-    .prose pre {
-      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
-        "Liberation Mono", "Courier New", monospace;
-      font-size: 0.85rem;
-      background: #111827;
-      color: #e5e7eb;
-      padding: 0.75rem 1rem;
-      border-radius: 0.5rem;
-      overflow-x: auto;
-    }
-
-    .prose pre code {
-      background: transparent;
-      padding: 0;
-    }
-
-    .prose strong {
-      font-weight: 600;
-      color: #374151;
-    }
-
-    .prose em {
-      font-style: italic;
-    }
-
   </style>
 
   <!-- Supabase + client setup -->
@@ -317,267 +140,206 @@
   <!-- NAV -->
   <nav class="fixed top-0 left-0 w-full bg-paper/90 border-b border-dark-brown/20 z-50 h-16">
     <div class="max-w-6xl mx-auto px-4 h-16 flex justify-between items-center">
-      <a href="index.html" class="flex items-center gap-2">
-        <span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-primary/10 border border-primary/30 text-primary font-semibold text-lg">M</span>
-        <div class="leading-tight">
-          <p class="text-sm font-semibold text-dark-brown tracking-wide">Muro Consulting Services</p>
-          <p class="text-[0.7rem] text-dark-grey/80">Growth, engagement, and systems for small-but-mighty teams</p>
-        </div>
-      </a>
-
-      <!-- Desktop nav -->
-      <div class="hidden md:flex items-center gap-6 text-sm">
-        <a href="index.html#about" class="text-dark-grey hover:text-primary transition">About</a>
+      <a href="index.html#hero" class="text-base md:text-lg font-bold text-dark-brown hover:text-primary transition">Home</a>
+      <div class="hidden md:flex items-center gap-6 text-sm font-semibold">
         <div class="dropdown">
-          <a href="index.html#services" class="text-dark-grey hover:text-primary transition flex items-center gap-1">
-            Services
-            <svg class="w-3 h-3" viewBox="0 0 20 20" fill="none">
-              <path d="M5 7l5 5 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </a>
+          <a href="index.html#about" class="text-dark-brown hover:text-primary">About</a>
           <div class="dropdown-menu">
-            <a href="index.html#services">Overview</a>
-            <a href="index.html#growth-engagement">Growth &amp; Engagement</a>
-            <a href="index.html#communications-brand">Communications &amp; Brand Building</a>
-            <a href="index.html#operations-systems">Operations, Systems &amp; Data</a>
+            <a href="index.html#about" class="dropdown-item">About Us</a>
+            <a href="index.html#approach" class="dropdown-item">Our Approach</a>
+            <a href="index.html#testimonials" class="dropdown-item">Testimonials</a>
           </div>
         </div>
-        <a href="blogs.html" class="text-primary font-medium">Insights</a>
-        <a href="index.html#contact" class="px-3 py-1 rounded-full border border-primary/40 text-primary text-sm hover:bg-primary hover:text-paper-soft transition">
-          Get in touch
-        </a>
+        <div class="dropdown">
+          <a href="index.html#services" class="text-dark-brown hover:text-primary transition">Services</a>
+          <div class="dropdown-menu">
+            <a href="growth_and_engagement.html" class="dropdown-item">Growth & Engagement</a>
+            <a href="data_technology.html" class="dropdown-item">Data & Technology</a>
+            <a href="operations_systems.html" class="dropdown-item">Operations & Systems</a>
+          </div>
+        </div>
+        <a href="index.html#contact" class="text-dark-brown hover:text-primary">Contact Us</a>
       </div>
 
-      <!-- Mobile nav button -->
-      <button
-        id="mobile-nav-toggle"
-        class="md:hidden inline-flex items-center justify-center w-9 h-9 rounded-full border border-dark-brown/20 bg-paper-soft text-dark-brown"
-        aria-label="Open navigation"
-      >
-        <svg id="mobile-nav-open-icon" class="w-5 h-5" viewBox="0 0 20 20" fill="none">
-          <path d="M3 6h14M3 10h14M3 14h14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-        </svg>
-        <svg id="mobile-nav-close-icon" class="w-5 h-5 hidden" viewBox="0 0 20 20" fill="none">
-          <path d="M5 5l10 10M15 5L5 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+      <!-- Mobile button -->
+      <button id="menu-toggle" class="md:hidden inline-flex items-center justify-center rounded-md border border-dark-brown/30 px-3 py-2 text-dark-brown">
+        <span class="sr-only">Open menu</span>
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
         </svg>
       </button>
     </div>
-  </nav>
 
-  <!-- Mobile nav drawer -->
-  <div id="mobile-nav" class="mobile-menu">
-    <div class="mobile-menu-panel flex flex-col">
-      <div class="px-4 py-4 flex items-center justify-between border-b border-dark-brown/10">
-        <div class="flex items-center gap-2">
-          <span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-primary/10 border border-primary/30 text-primary font-semibold text-lg">M</span>
-          <div class="leading-tight">
-            <p class="text-sm font-semibold text-dark-brown tracking-wide">Muro Consulting Services</p>
-          </div>
+    <!-- Mobile dropdown -->
+    <div id="mobile-menu" class="md:hidden hidden border-t border-dark-brown/20 bg-paper/95">
+      <div class="max-w-6xl mx-auto px-4 py-3 space-y-2 text-sm font-semibold">
+        <a href="index.html#about" class="block text-dark-brown">About</a>
+        <a href="index.html#services" class="block text-dark-brown">Services</a>
+        <div class="pl-3 space-y-1">
+          <a href="growth_and_engagement.html" class="block text-dark-brown/90">• Growth & Engagement</a>
+          <a href="data_technology.html" class="block text-dark-brown/90">• Data & Technology</a>
+          <a href="operations_systems.html" class="block text-dark-brown/90">• Operations & Systems</a>
         </div>
-        <button
-          id="mobile-nav-close"
-          class="inline-flex items-center justify-center w-9 h-9 rounded-full border border-dark-brown/20 bg-paper-soft text-dark-brown"
-          aria-label="Close navigation"
-        >
-          <svg class="w-5 h-5" viewBox="0 0 20 20" fill="none">
-            <path d="M5 5l10 10M15 5L5 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-          </svg>
-        </button>
-      </div>
-      <div class="flex-1 overflow-y-auto px-4 py-4">
-        <a href="index.html#about" class="block py-2 text-sm text-dark-grey hover:text-primary">About</a>
-        <div class="mt-2">
-          <p class="text-[0.75rem] font-semibold text-dark-grey/70 uppercase tracking-[0.14em] mb-1">Services</p>
-          <a href="index.html#services" class="block py-1.5 text-sm text-dark-grey hover:text-primary">Overview</a>
-          <a href="index.html#growth-engagement" class="block py-1.5 text-sm text-dark-grey hover:text-primary">Growth &amp; Engagement</a>
-          <a href="index.html#communications-brand" class="block py-1.5 text-sm text-dark-grey hover:text-primary">Communications &amp; Brand Building</a>
-          <a href="index.html#operations-systems" class="block py-1.5 text-sm text-dark-grey hover:text-primary">Operations, Systems &amp; Data</a>
-        </div>
-        <a href="blogs.html" class="block mt-3 py-2 text-sm font-medium text-primary">Insights</a>
-        <a href="index.html#contact" class="mt-4 inline-flex items-center justify-center px-3 py-2 rounded-full border border-primary/40 text-primary text-sm hover:bg-primary hover:text-paper-soft transition">
-          Get in touch
-        </a>
+        <a href="index.html#contact" class="block text-dark-brown">Contact Us</a>
       </div>
     </div>
-  </div>
+  </nav>
 
   <!-- MAIN CONTENT -->
-  <main class="max-w-6xl mx-auto px-4 pt-24 pb-20">
-    <!-- Header -->
-    <section class="mb-10 md:mb-12">
-      <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-6">
-        <div class="max-w-2xl">
-          <p class="text-xs font-semibold tracking-[0.2em] text-primary/80 uppercase mb-2">Insights &amp; resources</p>
-          <h1 class="h-title text-3xl md:text-4xl font-semibold tracking-tight mb-2">
-            Thoughtful guidance for small-but-mighty teams
+  <main class="pt-24 pb-16 bg-paper min-h-screen">
+    <!-- Hero -->
+    <section class="border-b border-dark-brown/10">
+      <div class="max-w-6xl mx-auto px-4 py-8 md:py-10">
+        <div class="max-w-3xl">
+          <p class="text-xs font-semibold tracking-[0.16em] text-primary uppercase mb-2">
+            Insights
+          </p>
+          <h1 class="h-title text-3xl md:text-4xl mb-2">
+            Insights with impact.
           </h1>
-          <p class="text-sm md:text-base text-dark-grey/90">
-            Practical, values-aligned reflections on fundraising, communications, operations, and
-            the real work of growing impact with limited capacity.
+          <p class="text-sm md:text-base text-dark-grey/95">
+            Practical perspectives on growth, data, and operations for mission-driven teams.
           </p>
           <div class="fade-divider"></div>
         </div>
-        <div class="flex flex-col items-start md:items-end gap-3">
-          <label class="w-full md:w-64">
-            <span class="sr-only">Search insights</span>
-            <div class="relative">
-              <span class="absolute inset-y-0 left-3 flex items-center text-dark-grey/50">
-                <svg class="w-4 h-4" viewBox="0 0 20 20" fill="none">
-                  <path d="M9 3.5A5.5 5.5 0 1 1 3.5 9 5.5 5.5 0 0 1 9 3.5Z" stroke="currentColor" stroke-width="1.5"/>
-                  <path d="M14.5 14.5 12 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-                </svg>
-              </span>
+      </div>
+    </section>
+
+    <!-- Filters + Grid -->
+    <section class="mt-4">
+      <div class="max-w-6xl mx-auto px-4 flex flex-col lg:flex-row gap-8 md:gap-10">
+        <!-- Sidebar / Filters -->
+        <aside class="lg:w-72 flex-shrink-0">
+          <div class="bg-white/80 border border-dark-brown/15 rounded-2xl p-5 shadow-card/30">
+            <h2 class="text-xs font-semibold tracking-[0.16em] text-primary uppercase mb-3">
+              Filters
+            </h2>
+
+            <!-- Search -->
+            <div class="mb-5">
+              <label for="blog-search" class="block text-[0.8rem] font-semibold text-dark-brown mb-1 uppercase tracking-wide">
+                Search insights
+              </label>
               <input
                 id="blog-search"
-                type="text"
-                placeholder="Search by topic or keyword"
-                class="w-full pl-9 pr-3 py-2.5 rounded-full border border-dark-brown/20 bg-paper-soft/80 text-sm placeholder:text-dark-grey/50 focus:border-accent focus:ring-0"
+                type="search"
+                placeholder="Search by title or topic"
+                class="w-full rounded-lg border border-dark-brown/20 bg-paper/70 px-3 py-2 text-sm text-dark-brown placeholder:text-dark-grey/60 focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary"
               />
             </div>
-          </label>
-          <p class="text-[0.75rem] text-dark-grey/70">
-            Filter by theme or scan the full archive below.
-          </p>
-        </div>
-      </div>
-    </section>
 
-    <!-- Filters -->
-    <section class="mb-8">
-      <div class="flex flex-wrap items-center gap-2 mb-3">
-        <button
-          id="filter-all"
-          class="tag-pill px-3 py-1.5 text-xs flex items-center gap-1 active"
-          type="button"
-        >
-          <span>All insights</span>
-        </button>
-        <button
-          id="filter-category"
-          class="tag-pill px-3 py-1.5 text-xs flex items-center gap-1"
-          type="button"
-        >
-          <span>Category</span>
-        </button>
-        <button
-          id="filter-tags"
-          class="tag-pill px-3 py-1.5 text-xs flex items-center gap-1"
-          type="button"
-        >
-          <span>Tags</span>
-        </button>
-      </div>
-      <div id="tag-filters" class="flex flex-wrap gap-2 text-xs"></div>
-    </section>
+            <div class="space-y-5 text-sm">
+              <!-- Category filter (JS will populate buttons here) -->
+              <div>
+                <h3 class="text-[0.8rem] font-semibold text-dark-brown mb-2 uppercase tracking-wide">
+                  Category
+                </h3>
+                <div id="category-filters" class="flex flex-wrap gap-2 text-[0.8rem]">
+                  <p class="text-[0.78rem] text-dark-grey/80">
+                    Categories will appear here once insights load.
+                  </p>
+                </div>
+              </div>
 
-    <!-- Posts grid -->
-    <section>
-      <div id="blog-loading" class="flex items-center gap-2 text-sm text-dark-grey">
-        <span class="w-4 h-4 border-2 border-accent border-t-transparent rounded-full animate-spin"></span>
-        <span>Loading insights…</span>
-      </div>
-      <p id="blog-error" class="hidden text-sm text-red-600"></p>
+              <!-- Tag filter (JS will populate buttons here) -->
+              <div>
+                <h3 class="text-[0.8rem] font-semibold text-dark-brown mb-2 uppercase tracking-wide">
+                  Topics
+                </h3>
+                <p class="text-[0.78rem] text-dark-grey/90 mb-2">
+                  Explore by topic. Tags are drawn directly from each post in Supabase.
+                </p>
+                <div id="tag-filters" class="flex flex-wrap gap-2 text-[0.8rem]">
+                  <p class="text-[0.78rem] text-dark-grey/80">
+                    Topics will appear here once insights load.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </aside>
 
-      <div
-        id="blog-posts"
-        class="mt-4 grid gap-5 grid-cols-1 md:grid-cols-2"
-      ></div>
+        <!-- Posts grid -->
+        <section class="flex-1">
+          <div id="blog-loading" class="text-sm text-dark-grey">
+            Loading insights…
+          </div>
+          <div id="blog-error" class="text-sm text-red-600 hidden"></div>
+
+          <!-- responsive grid: 1 col on mobile, 2 on md+, 3 on xl -->
+          <div id="blog-posts" class="mt-3 grid gap-6 md:grid-cols-2 xl:grid-cols-3"></div>
+        </section>
+      </div>
     </section>
   </main>
 
-  <!-- MODAL -->
+  <!-- CTA -->
+  <section class="bg-white/90 border-t border-dark-brown/10">
+    <div class="max-w-6xl mx-auto px-4 py-10 md:py-12 text-center">
+      <h2 class="h-title text-2xl md:text-3xl mb-2">
+        Ready to put these ideas to work?
+      </h2>
+      <p class="max-w-2xl mx-auto text-sm md:text-base text-dark-grey/95">
+        We help mission-driven organizations translate insights into actionable strategies across growth, data, and operations.
+      </p>
+      <a href="index.html#contact"
+         class="inline-block mt-6 bg-primary text-paper font-semibold px-6 py-3 rounded-lg hover:bg-accent transition active:scale-[.99]">
+        CONTACT US
+      </a>
+    </div>
+  </section>
+
+  <!-- BLOG MODAL (popup for full post) -->
   <div
-    id="blog-modal-backdrop"
-    class="fixed inset-0 hidden items-center justify-center z-50"
+    id="blog-modal"
+    class="fixed inset-0 z-50 hidden items-center justify-center px-4"
+    aria-hidden="true"
   >
+    <!-- Backdrop -->
     <div
-      id="blog-modal"
-      class="hidden max-w-3xl w-full mx-4 bg-paper rounded-3xl shadow-card border border-dark-brown/15 overflow-hidden flex flex-col max-h-[90vh]"
+      id="blog-modal-backdrop"
+      class="absolute inset-0 bg-black/40"
+    ></div>
+
+    <!-- Modal content -->
+    <div
+      class="modal-inner relative max-w-3xl w-full max-h-[85vh] overflow-y-auto bg-paper rounded-2xl shadow-card border border-dark-brown/20 p-6 md:p-8"
       role="dialog"
       aria-modal="true"
       aria-labelledby="blog-modal-title"
     >
-      <div class="flex items-center justify-between px-5 py-3 border-b border-dark-brown/10 bg-paper-soft/80">
-        <div>
-          <p class="text-[0.7rem] font-semibold tracking-[0.16em] uppercase text-primary">
-            Insight
-          </p>
-          <h2 id="blog-modal-title" class="text-base font-semibold text-dark-brown"></h2>
-        </div>
-        <button
-          id="blog-modal-close"
-          class="inline-flex items-center justify-center w-8 h-8 rounded-full border border-dark-brown/25 text-dark-brown hover:bg-paper-soft focus:outline-none focus:ring-2 focus:ring-accent/50"
-          aria-label="Close blog post"
-        >
-          ✕
-        </button>
-      </div>
-      <div
-        id="blog-modal-scroll"
-        class="flex-1 overflow-y-auto px-5 md:px-6 py-4"
+      <button
+        id="blog-modal-close"
+        class="absolute top-3 right-3 inline-flex items-center justify-center rounded-full border border-dark-brown/20 w-8 h-8 text-dark-brown hover:bg-primary hover:text-paper hover:border-primary transition"
+        aria-label="Close blog post"
       >
-        <div id="blog-modal-content" class="text-sm text-dark-grey"></div>
-      </div>
+        ✕
+      </button>
+
+      <div id="blog-modal-content" class="prose max-w-none text-left"></div>
     </div>
   </div>
 
-  <footer class="border-t border-dark-brown/15 mt-10 pt-6 pb-8">
-    <div class="max-w-6xl mx-auto px-4 flex flex-col md:flex-row md:items-center md:justify-between gap-3">
-      <p class="text-xs text-dark-grey/80">
-        © <span id="year"></span> Muro Consulting Services. All rights reserved.
-      </p>
-      <p class="text-xs text-dark-grey/70">
-        Supporting smaller nonprofits and social enterprises with practical, people-centered strategy.
-      </p>
-    </div>
+  <!-- FOOTER -->
+  <footer class="bg-dark-brown py-8 text-center text-sm text-paper border-t border-secondary/40">
+    <p>© <span id="year"></span> Muro Consulting Services</p>
   </footer>
 
   <script>
     document.getElementById('year').textContent = new Date().getFullYear();
 
-    const mobileToggle = document.getElementById('mobile-nav-toggle');
-    const mobileClose = document.getElementById('mobile-nav-close');
-    const mobileNav = document.getElementById('mobile-nav');
-    const openIcon = document.getElementById('mobile-nav-open-icon');
-    const closeIcon = document.getElementById('mobile-nav-close-icon');
-
-    function setMobileNav(open) {
-      if (!mobileNav) return;
-      if (open) {
-        mobileNav.classList.add('open');
-        document.body.classList.add('mobile-nav-open');
-        openIcon.classList.add('hidden');
-        closeIcon.classList.remove('hidden');
-      } else {
-        mobileNav.classList.remove('open');
-        document.body.classList.remove('mobile-nav-open');
-        openIcon.classList.remove('hidden');
-        closeIcon.classList.add('hidden');
+    // Mobile menu toggle + auto-close
+    (function(){
+      const btn = document.getElementById('menu-toggle');
+      const mm  = document.getElementById('mobile-menu');
+      if(btn && mm){
+        btn.addEventListener('click', ()=> mm.classList.toggle('hidden'));
+        mm.querySelectorAll('a').forEach(a=>{
+          a.addEventListener('click', ()=> mm.classList.add('hidden'));
+        });
+        window.addEventListener('hashchange', ()=> mm.classList.add('hidden'));
       }
-    }
-
-    if (mobileToggle) {
-      mobileToggle.addEventListener('click', () => {
-        const isOpen = mobileNav.classList.contains('open');
-        setMobileNav(!isOpen);
-      });
-    }
-
-    if (mobileClose) {
-      mobileClose.addEventListener('click', () => setMobileNav(false));
-    }
-
-    if (mobileNav) {
-      mobileNav.addEventListener('click', (e) => {
-        if (e.target === mobileNav) {
-          setMobileNav(false);
-        }
-      });
-
-      mobileNav.querySelectorAll('a[href^="#"], a[href$=".html"], a[href^="http"]').forEach(link => {
-        link.addEventListener('click', () => setMobileNav(false));
-      });
-    }
+    })();
   </script>
 </body>
 </html>
