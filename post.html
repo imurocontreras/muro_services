@@ -105,6 +105,20 @@
       color:#f5f5f5;
       border-color:#446c77;
     }
+    /* Basic prose styles in case Tailwind Typography isn't available */
+    .prose {
+      color: #374151;
+      line-height: 1.65;
+      font-size: 0.975rem;
+    }
+    .prose p { margin: 0 0 1rem; }
+    .prose h1, .prose h2, .prose h3, .prose h4 { margin: 1.2rem 0 0.6rem; color: #2c2c2c; }
+    .prose a { color: #568a99; text-decoration: underline; }
+    .prose img { max-width: 100%; height: auto; display: block; margin: 0.6rem 0; border-radius: 6px; }
+    .prose ul, .prose ol { margin: 0 0 1rem 1.25rem; }
+    .prose blockquote { margin: 0 0 1rem; padding-left: 1rem; border-left: 4px solid rgba(0,0,0,0.06); color: #555; }
+    .prose pre { background: #f3f4f6; padding: 0.9rem; overflow: auto; border-radius: 8px; margin: 0 0 1rem; }
+    .prose code { background: #eef2f7; padding: 0.15rem 0.3rem; border-radius: 4px; }
   </style>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -268,6 +282,25 @@
       if (!words) return '';
       const minutes = Math.max(1, Math.round(words / 220));
       return minutes + ' min read';
+    }
+
+    // Decode HTML entities (multi-pass) to handle escaped HTML stored in Supabase
+    function decodeHtmlEntities(str) {
+      let current = String(str || '');
+      const txt = document.createElement('textarea');
+      let prev;
+      let iterations = 0;
+      do {
+        prev = current;
+        txt.innerHTML = current;
+        current = txt.value;
+        iterations += 1;
+      } while (iterations < 5 && current !== prev && /&(lt|gt|amp|quot|#39);/i.test(current));
+
+      if (/(?:&lt;|&gt;)/.test(current)) {
+        console.warn('Decoded HTML still contains escaped entities — content may be double-escaped or stored oddly.', { sampleBefore: str, sampleAfter: current });
+      }
+      return current;
     }
 
     function formatSupabaseDate(value) {
@@ -490,17 +523,28 @@
 
         // Render Markdown -> HTML and sanitize. If `marked`/`DOMPurify` are unavailable, fall back to raw content.
         (function renderContent() {
-          const raw = post.content || '';
-          let rendered = raw;
+          let rendered = String(post.content || '');
+
+          // 1) decode entities first (handles &lt;p&gt; stored values)
           try {
-            if (typeof marked !== 'undefined' && raw) {
-              rendered = marked.parse(raw);
-            }
+            rendered = decodeHtmlEntities(rendered);
           } catch (e) {
-            console.warn('marked parse failed, using raw content', e);
-            rendered = raw;
+            console.warn('decodeHtmlEntities error', e);
           }
 
+          // 2) if decoded string contains HTML tags, use as HTML; otherwise parse Markdown
+          const looksLikeHtml = /<([a-z][\s\S]*?)>/i.test(rendered.trim());
+          if (!looksLikeHtml) {
+            try {
+              if (typeof marked !== 'undefined' && rendered.trim()) {
+                rendered = marked.parse(rendered);
+              }
+            } catch (e) {
+              console.warn('marked parse failed, using raw content', e);
+            }
+          }
+
+          // 3) sanitize if DOMPurify available
           try {
             if (typeof DOMPurify !== 'undefined') {
               rendered = DOMPurify.sanitize(rendered);
@@ -509,7 +553,19 @@
             console.warn('DOMPurify sanitize failed, using un-sanitized content', e);
           }
 
-          document.getElementById('post-content').innerHTML = rendered;
+          // insert
+          const contentEl = document.getElementById('post-content');
+          if (contentEl) contentEl.innerHTML = rendered;
+
+          // diagnostic for developers
+          try {
+            const sampleHtml = contentEl ? contentEl.innerHTML.slice(0, 240) : '';
+            const sampleText = contentEl ? (contentEl.innerText || '').slice(0,240) : '';
+            console.info('post: rendered content sample', { sampleHtml, sampleText, dompurify: typeof DOMPurify !== 'undefined' });
+            if (/&lt;|&gt;|&amp;lt;|&amp;gt;/.test(sampleHtml)) {
+              console.warn('post: detected escaped HTML in rendered content — content may be double-escaped or sanitizer removed tags.', { sampleHtml });
+            }
+          } catch (e) {}
         })();
 
         // Set the date under the author (right-aligned)

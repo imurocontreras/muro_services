@@ -26,6 +26,35 @@ function escapeHtml(str) {
     .replace(/'/g, '&#39;');
 }
 
+// Decode HTML entities back into literal characters.
+// Useful when content stored in Supabase contains escaped HTML like
+// "&lt;p&gt;Hello&lt;/p&gt;" and we want to render <p>Hello</p>.
+function decodeHtmlEntities(str) {
+  // Decode repeatedly in case the content was escaped multiple times
+  // (e.g. "&amp;lt;p&amp;gt;" -> "&lt;p&gt;" -> "<p>").
+  let current = String(str || '');
+  const txt = document.createElement('textarea');
+  let prev;
+  let iterations = 0;
+  do {
+    prev = current;
+    txt.innerHTML = current;
+    current = txt.value;
+    iterations += 1;
+  } while (
+    iterations < 5 &&
+    current !== prev &&
+    /&(lt|gt|amp|quot|#39);/i.test(current)
+  );
+
+  // If after decoding we still see escaped angle brackets, warn to help debug.
+  if (/(?:&lt;|&gt;)/.test(current)) {
+    console.warn('Decoded HTML still contains escaped entities — content may be double-escaped or stored oddly.', { sampleBefore: str, sampleAfter: current });
+  }
+
+  return current;
+}
+
 // Estimate reading time (in minutes) from HTML content
 function estimateReadingTime(html) {
   const text = getPlainText(html);
@@ -172,6 +201,10 @@ function getRelatedPosts(currentPost, max = 3) {
 
 // ---------- modal ----------
 
+// Local debug controls (set in DevTools: `window.blogDebug = { ... }`)
+window.blogDebug = window.blogDebug || { forceBypassSanitize: false, verbose: false };
+
+
 function openBlogModal(post, meta) {
   const modal = document.getElementById('blog-modal');
   const content = document.getElementById('blog-modal-content');
@@ -192,23 +225,51 @@ function openBlogModal(post, meta) {
     : '';
 
   // Render and sanitize the post content (Markdown -> HTML)
+  // Render and sanitize the post content.
+  // 1) Decode entities (handles values like "&lt;p&gt;...")
+  // 2) If decoded contains HTML tags, keep as HTML. Otherwise parse Markdown.
+  // 3) Sanitize with DOMPurify where available.
   const rawContent = post.content || '';
-  let renderedContent = rawContent;
+  let renderedContent = String(rawContent || '');
+
+  // 1) decode entities first (handles double-escaping too)
   try {
-    if (typeof marked !== 'undefined' && rawContent) {
-      renderedContent = marked.parse(rawContent);
-    }
+    renderedContent = decodeHtmlEntities(renderedContent);
   } catch (e) {
-    console.warn('marked.parse error', e);
-    renderedContent = rawContent;
+    console.warn('decodeHtmlEntities error', e);
   }
 
+  // 2) detect whether decoded string already contains HTML tags
+  const looksLikeHtml = /<([a-z][\s\S]*?)>/i.test(renderedContent.trim());
+
+  if (!looksLikeHtml) {
+    // If it doesn't look like HTML and `marked` is available, parse Markdown.
+    try {
+      if (typeof marked !== 'undefined' && renderedContent.trim()) {
+        renderedContent = marked.parse(renderedContent);
+      }
+    } catch (e) {
+      console.warn('marked.parse error', e);
+    }
+  }
+
+  // 3) Sanitize if DOMPurify is present. Keep original if not.
   try {
     if (typeof DOMPurify !== 'undefined') {
       renderedContent = DOMPurify.sanitize(renderedContent);
     }
   } catch (e) {
     console.warn('DOMPurify.sanitize error', e);
+  }
+
+  // Helpful debug for local development
+  try {
+    if (window.location && window.location.hostname === 'localhost') {
+      console.debug('blog: renderedContent sample', renderedContent.slice(0, 240));
+      console.debug('blog: DOMPurify present?', typeof DOMPurify !== 'undefined');
+    }
+  } catch (e) {
+    // ignore
   }
 
   const authorHtml = post.author ? `<p class="text-sm text-dark-grey/80 mt-4 text-right">By ${escapeHtml(post.author)}</p>` : '';
@@ -283,6 +344,42 @@ function openBlogModal(post, meta) {
     </div>
     ${relatedHtml}
   `;
+
+  // Diagnostic: inspect the inserted content to help debug rendering issues.
+  try {
+    const proseEl = content.querySelector('.prose');
+    if (proseEl) {
+      const nodeType = proseEl.nodeType; // 1 = element
+      const sampleHtml = proseEl.innerHTML.slice(0, 400);
+      const sampleText = proseEl.innerText.slice(0, 400);
+      const cs = window.getComputedStyle ? window.getComputedStyle(proseEl) : null;
+      const computed = cs
+        ? { whiteSpace: cs.whiteSpace, display: cs.display, fontFamily: cs.fontFamily }
+        : null;
+
+      console.info('blog: prose diagnostics', { nodeType, sampleHtml, sampleText, computed });
+
+      // If the element's innerHTML appears to contain escaped tags, log a clearer warning.
+      if (/&lt;|&gt;|&amp;lt;|&amp;gt;/.test(sampleHtml) || /&lt;|&gt;/.test(sampleText)) {
+        console.warn('blog: detected escaped HTML inside .prose — content may be double-escaped or sanitizer stripped tags.', { sampleHtml, sampleText });
+      }
+
+      // If the developer set the debug flag to force bypass sanitization, try forcing innerHTML.
+      if (window.blogDebug && window.blogDebug.forceBypassSanitize) {
+        try {
+          // Force-insert the decoded HTML directly into the .prose element for testing.
+          proseEl.innerHTML = renderedContent;
+          console.warn('blog: forceBypassSanitize applied — inserted renderedContent directly into .prose for debug.');
+        } catch (e) {
+          console.error('blog: forceBypassSanitize failed', e);
+        }
+      }
+    } else {
+      console.info('blog: .prose element not found after insertion');
+    }
+  } catch (e) {
+    console.warn('blog: diagnostics error', e);
+  }
 
   // attach click handlers for related items
   if (related.length) {

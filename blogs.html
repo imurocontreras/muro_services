@@ -126,6 +126,21 @@
         max-height:80vh;
       }
     }
+
+    /* Basic prose styles in case Tailwind Typography isn't available */
+    .prose {
+      color: #374151; /* slightly darker than body text for readability */
+      line-height: 1.65;
+      font-size: 0.975rem;
+    }
+    .prose p { margin: 0 0 1rem; }
+    .prose h1, .prose h2, .prose h3, .prose h4 { margin: 1.2rem 0 0.6rem; color: #2c2c2c; }
+    .prose a { color: #568a99; text-decoration: underline; }
+    .prose img { max-width: 100%; height: auto; display: block; margin: 0.6rem 0; border-radius: 6px; }
+    .prose ul, .prose ol { margin: 0 0 1rem 1.25rem; }
+    .prose blockquote { margin: 0 0 1rem; padding-left: 1rem; border-left: 4px solid rgba(0,0,0,0.06); color: #555; }
+    .prose pre { background: #f3f4f6; padding: 0.9rem; overflow: auto; border-radius: 8px; margin: 0 0 1rem; }
+    .prose code { background: #eef2f7; padding: 0.15rem 0.3rem; border-radius: 4px; }
   </style>
 
   <!-- Supabase + client setup -->
