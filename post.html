@@ -112,7 +112,14 @@
       font-size: 0.975rem;
     }
     .prose p { margin: 0 0 1rem; }
-    .prose h1, .prose h2, .prose h3, .prose h4 { margin: 1.2rem 0 0.6rem; color: #2c2c2c; }
+    /* Only set heading color when a Tailwind "text-" utility isn't present */
+    .prose h1:not([class*="text-"]),
+    .prose h2:not([class*="text-"]),
+    .prose h3:not([class*="text-"]),
+    .prose h4:not([class*="text-"]) {
+      margin: 1.2rem 0 0.6rem;
+      color: inherit;
+    }
     .prose a { color: #568a99; text-decoration: underline; }
     .prose img { max-width: 100%; height: auto; display: block; margin: 0.6rem 0; border-radius: 6px; }
     .prose ul, .prose ol { margin: 0 0 1rem 1.25rem; }
