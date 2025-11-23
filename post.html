@@ -372,7 +372,7 @@
         .reverse();
     }
 
-    async function loadContext(currentPost) {
+    async function loadContext(currentPost, previousVisitedSlug) {
       const navPrev = document.getElementById('post-prev');
       const navNext = document.getElementById('post-next');
       const sidebarMore = document.getElementById('sidebar-more');
@@ -400,7 +400,13 @@
         const all = posts;
         const idx = all.findIndex(p => p.slug === currentPost.slug);
 
-        const prevPost = idx > 0 ? all[idx - 1] : null;
+        // If the user previously visited another post in this session, prefer that as "previous".
+        let prevPost = null;
+        if (previousVisitedSlug && previousVisitedSlug !== currentPost.slug) {
+          prevPost = all.find(p => p.slug === previousVisitedSlug) || null;
+        }
+
+        // Next post remains chronological; previous is ONLY the session-stored slug
         const nextPost = idx >= 0 && idx < all.length - 1 ? all[idx + 1] : null;
 
         // Prev link
@@ -513,6 +519,8 @@
         }
 
         const post = data;
+        // expose current slug for beforeunload handler
+        window.currentPostSlug = post.slug;
         const dateText = formatSupabaseDate(post.published_at);
         const readTimeText = estimateReadingTime(post.content || '');
 
@@ -582,8 +590,25 @@
         if (loadingEl) loadingEl.classList.add('hidden');
         if (articleEl) articleEl.classList.remove('hidden');
 
-        // Load prev/next + sidebar related
-        loadContext(post);
+        // Determine previously visited post slug stored in this session (if any)
+        const previousVisitedSlug = sessionStorage.getItem('muro_last_viewed_post');
+
+        // Load prev/next + sidebar related (pass previousVisitedSlug so we can prefer it)
+        loadContext(post, previousVisitedSlug);
+
+        // After rendering, record this post as the last viewed for future navigations
+        try {
+          sessionStorage.setItem('muro_last_viewed_post', post.slug);
+        } catch (e) {
+          // ignore storage errors
+        }
+
+        // Ensure we update session storage on page unload/navigation too
+        try {
+          window.addEventListener('beforeunload', () => {
+            try { sessionStorage.setItem('muro_last_viewed_post', window.currentPostSlug || ''); } catch (e) {}
+          });
+        } catch (e) {}
       } catch (err) {
         console.error(err);
         if (loadingEl) loadingEl.classList.add('hidden');
