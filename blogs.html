@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-0SCW2LYFQM"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-0SCW2LYFQM');
+  </script>
+
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+  <title>Insights • Muro Consulting Services</title>
+
+  <link rel="icon" href="assets/favicon.ico?v=3" sizes="any">
+  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png?v=3" sizes="180x180">
+  <meta name="theme-color" content="#f5f5f5">
+
+  <!-- Fonts / Tailwind (same as service pages) -->
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Poppins:wght@400;600&display=swap" rel="stylesheet"/>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors:{
+            primary:'#568a99',
+            accent:'#446c77',
+            secondary:'#c79f7f',
+            paper:'#f5f5f5',
+            'dark-brown':'#856042',
+            'dark-grey':'#818c8e'
+          },
+          fontFamily:{
+            montserrat:['Montserrat','sans-serif'],
+            poppins:['Poppins','sans-serif']
+          },
+          boxShadow:{ card:'0 10px 25px rgba(0,0,0,.07)' }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    html{ scroll-behavior:smooth; }
+    body{
+      background:#f5f5f5;
+      color:#818c8e;
+      font-family:'Poppins',sans-serif;
+    }
+    nav{
+      -webkit-backdrop-filter:saturate(1.1) blur(6px);
+      backdrop-filter:saturate(1.1) blur(6px);
+    }
+    .h-title{
+      font-family:'Montserrat',sans-serif;
+      color:#856042;
+    }
+    .fade-divider{
+      height:1px;
+      background:linear-gradient(90deg,transparent,#c7a288,transparent);
+      max-width:420px;
+      margin:22px 0 0;
+      opacity:.5;
+    }
+
+    /* Dropdown Menu (nav) */
+    .dropdown{
+      position: relative;
+      display: inline-block;
+    }
+    .dropdown > a{ display:block; }
+    .dropdown-menu{
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #f5f5f5;
+      border: 1px solid rgba(133,96,66,.2);
+      border-radius: 12px;
+      box-shadow: 0 8px 25px rgba(0,0,0,.1);
+      padding: 12px;
+      min-width: 200px;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity .2s ease, visibility .2s ease, transform .2s ease;
+      transform: translateX(-50%) translateY(-4px);
+      z-index: 1000;
+      margin-top: 8px;
+    }
+    .dropdown:hover .dropdown-menu,
+    .dropdown:focus-within .dropdown-menu{
+      opacity: 1;
+      visibility: visible;
+      transform: translateX(-50%) translateY(0);
+    }
+    .dropdown-item{
+      display:block;
+      padding:10px 16px;
+      margin:4px 0;
+      color:#856042;
+      text-decoration:none;
+      border-radius:8px;
+      font-weight:600;
+      font-size:14px;
+      transition: background-color 0.15s ease, color 0.15s ease;
+      border:1px solid transparent;
+    }
+    .dropdown-item:hover{
+      background-color:#568a99;
+      color:#f5f5f5;
+      border-color:#446c77;
+    }
+
+    /* Scroll lock when modal open */
+    .no-scroll{
+      overflow:hidden;
+      height:100%;
+    }
+
+    /* Modal tweak for small screens */
+    @media (max-width:640px){
+      #blog-modal .modal-inner{
+        max-height:80vh;
+      }
+    }
+
+    /* Basic prose styles in case Tailwind Typography isn't available */
+    .prose {
+      color: #374151; /* slightly darker than body text for readability */
+      line-height: 1.65;
+      font-size: 0.975rem;
+    }
+    .prose p { margin: 0 0 1rem; }
+    /* Only set heading color when a Tailwind "text-" utility isn't present */
+    .prose h1:not([class*="text-"]),
+    .prose h2:not([class*="text-"]),
+    .prose h3:not([class*="text-"]),
+    .prose h4:not([class*="text-"]) {
+      margin: 1.2rem 0 0.6rem;
+      color: inherit;
+    }
+    .prose a { color: #568a99; text-decoration: underline; }
+    .prose img { max-width: 100%; height: auto; display: block; margin: 0.6rem 0; border-radius: 6px; }
+    .prose ul, .prose ol { margin: 0 0 1rem 1.25rem; }
+    .prose blockquote { margin: 0 0 1rem; padding-left: 1rem; border-left: 4px solid rgba(0,0,0,0.06); color: #555; }
+    .prose pre { background: #f3f4f6; padding: 0.9rem; overflow: auto; border-radius: 8px; margin: 0 0 1rem; }
+    .prose code { background: #eef2f7; padding: 0.15rem 0.3rem; border-radius: 4px; }
+  </style>
+
+  <!-- Supabase + client setup -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="./js/supabaseClient.js"></script>
+
+  <!-- Blog logic -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/dompurify@2.4.0/dist/purify.min.js"></script>
+  <script src="./js/blog.js" defer></script>
+</head>
+<body class="overflow-x-hidden">
+
+  <!-- NAV -->
+  <nav class="fixed top-0 left-0 w-full bg-paper/90 border-b border-dark-brown/20 z-50 h-16">
+    <div class="max-w-6xl mx-auto px-4 h-16 flex justify-between items-center">
+      <a href="index.html#hero" class="text-base md:text-lg font-bold text-dark-brown hover:text-primary transition">Home</a>
+      <div class="hidden md:flex items-center gap-6 text-sm font-semibold">
+        <div class="dropdown">
+          <a href="index.html#about" class="text-dark-brown hover:text-primary">About</a>
+          <div class="dropdown-menu">
+            <a href="index.html#about" class="dropdown-item">About Us</a>
+            <a href="index.html#approach" class="dropdown-item">Our Approach</a>
+            <a href="index.html#testimonials" class="dropdown-item">Testimonials</a>
+          </div>
+        </div>
+        <div class="dropdown">
+          <a href="index.html#services" class="text-dark-brown hover:text-primary transition">Services</a>
+          <div class="dropdown-menu">
+            <a href="growth_and_engagement.html" class="dropdown-item">Growth & Engagement</a>
+            <a href="data_technology.html" class="dropdown-item">Data & Technology</a>
+            <a href="operations_systems.html" class="dropdown-item">Operations & Systems</a>
+          </div>
+        </div>
+        <a href="index.html#contact" class="text-dark-brown hover:text-primary">Contact Us</a>
+      </div>
+
+      <!-- Mobile button -->
+      <button id="menu-toggle" class="md:hidden inline-flex items-center justify-center rounded-md border border-dark-brown/30 px-3 py-2 text-dark-brown">
+        <span class="sr-only">Open menu</span>
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Mobile dropdown -->
+    <div id="mobile-menu" class="md:hidden hidden border-t border-dark-brown/20 bg-paper/95">
+      <div class="max-w-6xl mx-auto px-4 py-3 space-y-2 text-sm font-semibold">
+        <a href="index.html#about" class="block text-dark-brown">About</a>
+        <a href="index.html#services" class="block text-dark-brown">Services</a>
+        <div class="pl-3 space-y-1">
+          <a href="growth_and_engagement.html" class="block text-dark-brown/90">• Growth & Engagement</a>
+          <a href="data_technology.html" class="block text-dark-brown/90">• Data & Technology</a>
+          <a href="operations_systems.html" class="block text-dark-brown/90">• Operations & Systems</a>
+        </div>
+        <a href="index.html#contact" class="block text-dark-brown">Contact Us</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- MAIN CONTENT -->
+  <main class="pt-24 pb-16 bg-paper min-h-screen">
+    <!-- Hero -->
+    <section class="border-b border-dark-brown/10">
+      <div class="max-w-6xl mx-auto px-4 py-8 md:py-10">
+        <div class="max-w-3xl">
+          <p class="text-xs font-semibold tracking-[0.16em] text-primary uppercase mb-2">
+            Insights
+          </p>
+          <h1 class="h-title text-3xl md:text-4xl mb-2">
+            Insights with impact.
+          </h1>
+          <p class="text-sm md:text-base text-dark-grey/95">
+            Practical perspectives on growth, data, and operations for mission-driven teams.
+          </p>
+          <div class="fade-divider"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Filters + Grid -->
+    <section class="mt-4">
+      <div class="max-w-6xl mx-auto px-4 flex flex-col lg:flex-row gap-8 md:gap-10">
+        <!-- Sidebar / Filters -->
+        <aside class="lg:w-72 flex-shrink-0">
+          <div class="bg-white/80 border border-dark-brown/15 rounded-2xl p-5 shadow-card/30">
+            <h2 class="text-xs font-semibold tracking-[0.16em] text-primary uppercase mb-3">
+              Filters
+            </h2>
+
+            <!-- Search -->
+            <div class="mb-5">
+              <label for="blog-search" class="block text-[0.8rem] font-semibold text-dark-brown mb-1 uppercase tracking-wide">
+                Search insights
+              </label>
+              <input
+                id="blog-search"
+                type="search"
+                placeholder="Search by title or topic"
+                class="w-full rounded-lg border border-dark-brown/20 bg-paper/70 px-3 py-2 text-sm text-dark-brown placeholder:text-dark-grey/60 focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary"
+              />
+            </div>
+
+            <div class="space-y-5 text-sm">
+              <!-- Category filter (JS will populate buttons here) -->
+              <div>
+                <h3 class="text-[0.8rem] font-semibold text-dark-brown mb-2 uppercase tracking-wide">
+                  Category
+                </h3>
+                <div id="category-filters" class="flex flex-wrap gap-2 text-[0.8rem]">
+                  <p class="text-[0.78rem] text-dark-grey/80">
+                    Categories will appear here once insights load.
+                  </p>
+                </div>
+              </div>
+
+              <!-- Tag filter (JS will populate buttons here) -->
+              <div>
+                <h3 class="text-[0.8rem] font-semibold text-dark-brown mb-2 uppercase tracking-wide">
+                  Topics
+                </h3>
+                <p class="text-[0.78rem] text-dark-grey/90 mb-2">
+                  Explore by topic. Tags are drawn directly from each post in Supabase.
+                </p>
+                <div id="tag-filters" class="flex flex-wrap gap-2 text-[0.8rem]">
+                  <p class="text-[0.78rem] text-dark-grey/80">
+                    Topics will appear here once insights load.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </aside>
+
+        <!-- Posts grid -->
+        <section class="flex-1">
+          <div id="blog-loading" class="text-sm text-dark-grey">
+            Loading insights…
+          </div>
+          <div id="blog-error" class="text-sm text-red-600 hidden"></div>
+
+          <!-- responsive grid: 1 col on mobile, 2 on md+, 3 on xl -->
+          <div id="blog-posts" class="mt-3 grid gap-6 md:grid-cols-2 xl:grid-cols-3"></div>
+        </section>
+      </div>
+    </section>
+  </main>
+
+  <!-- CTA -->
+  <section class="bg-white/90 border-t border-dark-brown/10">
+    <div class="max-w-6xl mx-auto px-4 py-10 md:py-12 text-center">
+      <h2 class="h-title text-2xl md:text-3xl mb-2">
+        Ready to put these ideas to work?
+      </h2>
+      <p class="max-w-2xl mx-auto text-sm md:text-base text-dark-grey/95">
+        We help mission-driven organizations translate insights into actionable strategies across growth, data, and operations.
+      </p>
+      <a href="index.html#contact"
+         class="inline-block mt-6 bg-primary text-paper font-semibold px-6 py-3 rounded-lg hover:bg-accent transition active:scale-[.99]">
+        CONTACT US
+      </a>
+    </div>
+  </section>
+
+  <!-- BLOG MODAL (popup for full post) -->
+  <div
+    id="blog-modal"
+    class="fixed inset-0 z-50 hidden items-center justify-center px-4"
+    aria-hidden="true"
+  >
+    <!-- Backdrop -->
+    <div
+      id="blog-modal-backdrop"
+      class="absolute inset-0 bg-black/40"
+    ></div>
+
+    <!-- Modal content -->
+    <div
+      class="modal-inner relative max-w-3xl w-full max-h-[85vh] overflow-y-auto bg-paper rounded-2xl shadow-card border border-dark-brown/20 p-6 md:p-8"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="blog-modal-title"
+    >
+      <button
+        id="blog-modal-close"
+        class="absolute top-3 right-3 inline-flex items-center justify-center rounded-full border border-dark-brown/20 w-8 h-8 text-dark-brown hover:bg-primary hover:text-paper hover:border-primary transition"
+        aria-label="Close blog post"
+      >
+        ✕
+      </button>
+
+      <div id="blog-modal-content" class="prose max-w-none text-left"></div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="bg-dark-brown py-8 text-center text-sm text-paper border-t border-secondary/40">
+    <p>© <span id="year"></span> Muro Consulting Services</p>
+  </footer>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Mobile menu toggle + auto-close
+    (function(){
+      const btn = document.getElementById('menu-toggle');
+      const mm  = document.getElementById('mobile-menu');
+      if(btn && mm){
+        btn.addEventListener('click', ()=> mm.classList.toggle('hidden'));
+        mm.querySelectorAll('a').forEach(a=>{
+          a.addEventListener('click', ()=> mm.classList.add('hidden'));
+        });
+        window.addEventListener('hashchange', ()=> mm.classList.add('hidden'));
+      }
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-0SCW2LYFQM"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-0SCW2LYFQM');
+  </script>
+
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Insight • Muro Consulting Services</title>
+
+  <link rel="icon" href="assets/favicon.ico?v=3" sizes="any">
+  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png?v=3" sizes="180x180">
+  <meta name="theme-color" content="#f5f5f5">
+
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors:{
+            primary:'#568a99',
+            accent:'#446c77',
+            secondary:'#c79f7f',
+            paper:'#f5f5f5',
+            'dark-brown':'#856042',
+            'dark-grey':'#818c8e'
+          },
+          fontFamily:{
+            montserrat:['Montserrat','sans-serif'],
+            poppins:['Poppins','sans-serif']
+          },
+          boxShadow:{ card:'0 10px 25px rgba(0,0,0,.07)' }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    html { scroll-behavior: smooth; }
+    body {
+      background:#f5f5f5;
+      color:#818c8e;
+      font-family:'Poppins',sans-serif;
+    }
+    nav{
+      -webkit-backdrop-filter:saturate(1.1) blur(6px);
+      backdrop-filter:saturate(1.1) blur(6px);
+    }
+    .h-title{
+      font-family:'Montserrat',sans-serif;
+      color:#856042;
+    }
+    .fade-divider{
+      height:1px;
+      background:linear-gradient(90deg,transparent,#c7a288,transparent);
+      max-width:420px;
+      margin:22px 0 0;
+      opacity:.5;
+    }
+
+    .dropdown{ position:relative; display:inline-block; }
+    .dropdown-menu{
+      position:absolute;
+      top:100%;
+      left:50%;
+      transform:translateX(-50%) translateY(-4px);
+      background:#f5f5f5;
+      border:1px solid rgba(133,96,66,.2);
+      border-radius:12px;
+      box-shadow:0 8px 25px rgba(0,0,0,.1);
+      padding:12px;
+      min-width:200px;
+      opacity:0;
+      visibility:hidden;
+      transition:.2s ease;
+      z-index:1000;
+    }
+    .dropdown:hover .dropdown-menu,
+    .dropdown:focus-within .dropdown-menu{
+      opacity:1;
+      visibility:visible;
+      transform:translateX(-50%) translateY(0);
+    }
+    .dropdown-item{
+      display:block;
+      padding:10px 16px;
+      margin:4px 0;
+      color:#856042;
+      text-decoration:none;
+      border-radius:8px;
+      font-weight:600;
+      font-size:14px;
+      transition:background-color .15s ease, color .15s ease;
+      border:1px solid transparent;
+    }
+    .dropdown-item:hover{
+      background-color:#568a99;
+      color:#f5f5f5;
+      border-color:#446c77;
+    }
+    /* Basic prose styles in case Tailwind Typography isn't available */
+    .prose {
+      color: #374151;
+      line-height: 1.65;
+      font-size: 0.975rem;
+    }
+    .prose p { margin: 0 0 1rem; }
+    /* Only set heading color when a Tailwind "text-" utility isn't present */
+    .prose h1:not([class*="text-"]),
+    .prose h2:not([class*="text-"]),
+    .prose h3:not([class*="text-"]),
+    .prose h4:not([class*="text-"]) {
+      margin: 1.2rem 0 0.6rem;
+      color: inherit;
+    }
+    .prose a { color: #568a99; text-decoration: underline; }
+    .prose img { max-width: 100%; height: auto; display: block; margin: 0.6rem 0; border-radius: 6px; }
+    .prose ul, .prose ol { margin: 0 0 1rem 1.25rem; }
+    .prose blockquote { margin: 0 0 1rem; padding-left: 1rem; border-left: 4px solid rgba(0,0,0,0.06); color: #555; }
+    .prose pre { background: #f3f4f6; padding: 0.9rem; overflow: auto; border-radius: 8px; margin: 0 0 1rem; }
+    .prose code { background: #eef2f7; padding: 0.15rem 0.3rem; border-radius: 4px; }
+  </style>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="./js/supabaseClient.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/dompurify@2.4.0/dist/purify.min.js"></script>
+</head>
+<body class="overflow-x-hidden">
+
+  <!-- NAV (matches services pages) -->
+  <nav class="fixed top-0 left-0 w-full bg-paper/90 border-b border-dark-brown/20 z-50 h-16">
+    <div class="max-w-6xl mx-auto px-4 h-16 flex justify-between items-center">
+      <a href="index.html#hero" class="text-base md:text-lg font-bold text-dark-brown hover:text-primary transition">Home</a>
+
+      <div class="hidden md:flex items-center gap-6 text-sm font-semibold">
+        <div class="dropdown">
+          <a href="index.html#about" class="text-dark-brown hover:text-primary">About</a>
+          <div class="dropdown-menu">
+            <a href="index.html#about" class="dropdown-item">About Us</a>
+            <a href="index.html#approach" class="dropdown-item">Our Approach</a>
+            <a href="index.html#testimonials" class="dropdown-item">Testimonials</a>
+          </div>
+        </div>
+
+        <div class="dropdown">
+          <a href="index.html#services" class="text-dark-brown hover:text-primary">Services</a>
+          <div class="dropdown-menu">
+            <a href="growth_and_engagement.html" class="dropdown-item">Growth & Engagement</a>
+            <a href="data_technology.html" class="dropdown-item">Data & Technology</a>
+            <a href="operations_systems.html" class="dropdown-item">Operations & Systems</a>
+          </div>
+        </div>
+
+        <a href="index.html#contact" class="text-dark-brown hover:text-primary">Contact Us</a>
+      </div>
+
+      <!-- Mobile Menu Button -->
+      <button id="menu-toggle"
+        class="md:hidden inline-flex items-center justify-center rounded-md border border-dark-brown/30 px-3 py-2 text-dark-brown">
+        <span class="sr-only">Open menu</span>
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Mobile dropdown -->
+    <div id="mobile-menu" class="md:hidden hidden border-t border-dark-brown/20 bg-paper/95">
+      <div class="max-w-6xl mx-auto px-4 py-3 space-y-2 text-sm font-semibold">
+        <a href="index.html#about" class="block text-dark-brown">About</a>
+        <a href="index.html#services" class="block text-dark-brown">Services</a>
+        <div class="pl-3 space-y-1">
+          <a href="growth_and_engagement.html" class="block text-dark-brown/90">• Growth & Engagement</a>
+          <a href="data_technology.html" class="block text-dark-brown/90">• Data & Technology</a>
+          <a href="operations_systems.html" class="block text-dark-brown/90">• Operations & Systems</a>
+        </div>
+        <a href="index.html#contact" class="block text-dark-brown">Contact Us</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- MAIN -->
+  <main class="pt-24 pb-16 min-h-screen bg-paper">
+    <div class="max-w-6xl mx-auto px-4">
+      <!-- Breadcrumb + Back -->
+      <div class="mb-6">
+        <p class="text-xs font-semibold tracking-[0.16em] text-primary uppercase mb-1">
+          Insight
+        </p>
+        <a
+          href="blogs.html"
+          class="inline-flex items-center gap-2 rounded-full border border-primary/40 bg-primary/10 px-4 py-2 text-sm md:text-base font-semibold text-primary hover:bg-primary hover:text-paper hover:border-primary transition"
+        >
+          ← Back to all insights
+        </a>
+        <div class="fade-divider"></div>
+      </div>
+
+      <!-- Layout -->
+      <div class="grid gap-8 lg:grid-cols-[minmax(0,3fr)_minmax(0,1.3fr)]">
+        <!-- ARTICLE -->
+        <div>
+          <div id="post-loading" class="text-sm text-dark-grey">
+            Loading insight…
+          </div>
+          <div id="post-error" class="hidden text-sm text-red-600"></div>
+
+          <article id="post-article" class="hidden bg-white rounded-2xl shadow-card border border-dark-brown/15 p-6 md:p-8">
+            <header class="mb-6">
+              <p id="post-category" class="text-[0.72rem] font-semibold tracking-[0.16em] uppercase text-primary mb-1"></p>
+              <p id="post-tags" class="text-[0.72rem] text-dark-grey mb-1"></p>
+              <h1 id="post-title" class="h-title text-2xl md:text-3xl mb-1"></h1>
+              <p id="post-meta" class="text-xs md:text-sm text-dark-grey"></p>
+            </header>
+
+            <section id="post-content" class="prose max-w-none text-[0.95rem] leading-relaxed text-dark-grey"></section>
+            <div class="mt-6 border-t border-dark-brown/10 pt-4">
+              <p id="post-author" class="text-sm text-dark-grey/80 text-right"></p>
+              <p id="post-date" class="text-xs text-dark-grey/70 mt-1 text-right"></p>
+            </div>
+
+            <!-- Prev / Next -->
+            <nav id="post-nav" class="mt-8 pt-5 border-t border-dark-brown/15 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 text-sm">
+              <div id="post-prev" class="sm:max-w-[48%]"></div>
+              <div id="post-next" class="sm:max-w-[48%] text-right"></div>
+            </nav>
+          </article>
+        </div>
+
+        <!-- SIDEBAR -->
+        <aside class="lg:block">
+          <div class="bg-white/90 rounded-2xl shadow-card border border-dark-brown/15 p-5 md:p-6">
+            <h2 class="text-sm font-semibold text-dark-brown mb-2">
+              More insights
+            </h2>
+            <p class="text-[0.78rem] text-dark-grey/90 mb-3">
+              Explore additional perspectives from Muro Consulting Services.
+            </p>
+            <div id="sidebar-more" class="space-y-2 text-sm">
+              <p class="text-[0.78rem] text-dark-grey">
+                Loading more insights…
+              </p>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="bg-dark-brown py-8 text-center text-sm text-paper border-t border-secondary/40">
+    <p>© <span id="year"></span> Muro Consulting Services</p>
+  </footer>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Mobile nav
+    (function(){
+      const btn = document.getElementById('menu-toggle');
+      const mm  = document.getElementById('mobile-menu');
+      if(btn && mm){
+        btn.addEventListener('click', ()=> mm.classList.toggle('hidden'));
+        mm.querySelectorAll('a').forEach(a=>{
+          a.addEventListener('click', ()=> mm.classList.add('hidden'));
+        });
+        window.addEventListener('hashchange', ()=> mm.classList.add('hidden'));
+      }
+    })();
+
+    function getPlainText(html) {
+      const tmp = document.createElement('div');
+      tmp.innerHTML = html || '';
+      const text = tmp.textContent || tmp.innerText || '';
+      return text.replace(/\s+/g, ' ').trim();
+    }
+
+    function estimateReadingTime(html) {
+      const text = getPlainText(html);
+      const words = text ? text.split(/\s+/).filter(Boolean).length : 0;
+      if (!words) return '';
+      const minutes = Math.max(1, Math.round(words / 220));
+      return minutes + ' min read';
+    }
+
+    // Decode HTML entities (multi-pass) to handle escaped HTML stored in Supabase
+    function decodeHtmlEntities(str) {
+      let current = String(str || '');
+      const txt = document.createElement('textarea');
+      let prev;
+      let iterations = 0;
+      do {
+        prev = current;
+        txt.innerHTML = current;
+        current = txt.value;
+        iterations += 1;
+      } while (iterations < 5 && current !== prev && /&(lt|gt|amp|quot|#39);/i.test(current));
+
+      if (/(?:&lt;|&gt;)/.test(current)) {
+        console.warn('Decoded HTML still contains escaped entities — content may be double-escaped or stored oddly.', { sampleBefore: str, sampleAfter: current });
+      }
+      return current;
+    }
+
+    function formatSupabaseDate(value) {
+      if (!value) return '';
+      const str = String(value); // "2024-10-03T00:00:00+00:00" or "2024-10-03 00:00:00+00"
+      const datePart = str.slice(0, 10); // "YYYY-MM-DD"
+      const [yearStr, monthStr, dayStr] = datePart.split('-');
+      const year = Number(yearStr);
+      const month = Number(monthStr);
+      const day = Number(dayStr);
+      if (!year || !month || !day) return '';
+      const dt = new Date(year, month - 1, day);
+      if (Number.isNaN(dt.getTime())) return '';
+      return dt.toLocaleDateString(undefined, {
+        year:'numeric', month:'short', day:'numeric'
+      });
+    }
+
+    function getSlugFromQuery() {
+      const params = new URLSearchParams(window.location.search);
+      return params.get('slug');
+    }
+
+    function getRelatedPosts(currentPost, allPosts, max = 3) {
+      if (!allPosts?.length) return [];
+      const currentTags = Array.isArray(currentPost.tags)
+        ? currentPost.tags.map(t => String(t).toLowerCase())
+        : [];
+      const currentCategory = (currentPost.category || '').toLowerCase();
+
+      const scored = allPosts
+        .filter(p => p.slug !== currentPost.slug)
+        .map(p => {
+          const pTags = Array.isArray(p.tags)
+            ? p.tags.map(t => String(t).toLowerCase())
+            : [];
+          const pCategory = (p.category || '').toLowerCase();
+
+          const sharedTags = currentTags.filter(t => pTags.includes(t));
+          const sharedTagCount = sharedTags.length;
+
+          let score = sharedTagCount * 2;
+          if (currentCategory && pCategory === currentCategory) {
+            score += 1;
+          }
+
+          return { post: p, score };
+        })
+        .filter(item => item.score > 0);
+
+      if (scored.length) {
+        return scored
+          .sort((a, b) => b.score - a.score)
+          .slice(0, max)
+          .map(item => item.post);
+      }
+
+      // fallback: just 3 latest others
+      return allPosts
+        .filter(p => p.slug !== currentPost.slug)
+        .slice(-3)
+        .reverse();
+    }
+
+    async function loadContext(currentPost, previousVisitedSlug) {
+      const navPrev = document.getElementById('post-prev');
+      const navNext = document.getElementById('post-next');
+      const sidebarMore = document.getElementById('sidebar-more');
+
+      try {
+        const supabase = window.supabaseClient;
+
+        const { data: posts, error } = await supabase
+          .from('posts')
+          .select('title, slug, published_at, category, tags, is_published')
+          .eq('is_published', true)
+          .order('published_at', { ascending: true });
+
+        if (error || !posts) {
+          console.error('Context load error', error);
+          if (sidebarMore) {
+            sidebarMore.innerHTML = `
+              <p class="text-[0.78rem] text-dark-grey">
+                More insights are currently unavailable.
+              </p>`;
+          }
+          return;
+        }
+
+        const all = posts;
+        const idx = all.findIndex(p => p.slug === currentPost.slug);
+
+        // If the user previously visited another post in this session, prefer that as "previous".
+        let prevPost = null;
+        if (previousVisitedSlug && previousVisitedSlug !== currentPost.slug) {
+          prevPost = all.find(p => p.slug === previousVisitedSlug) || null;
+        }
+
+        // Next post remains chronological; previous is ONLY the session-stored slug
+        const nextPost = idx >= 0 && idx < all.length - 1 ? all[idx + 1] : null;
+
+        // Prev link
+        if (navPrev) {
+          navPrev.innerHTML = '';
+          if (prevPost) {
+            const prevDate = formatSupabaseDate(prevPost.published_at);
+            navPrev.innerHTML = `
+              <a href="post.html?slug=${encodeURIComponent(prevPost.slug)}"
+                 class="inline-flex items-start gap-2 text-primary hover:text-accent">
+                <span class="mt-[2px] text-lg">←</span>
+                <span>
+                  <span class="block text-[0.7rem] uppercase tracking-[0.16em] text-dark-grey">Previous</span>
+                  <span class="block font-semibold">${prevPost.title}</span>
+                  <span class="block text-[0.7rem] text-dark-grey">${prevDate}</span>
+                </span>
+              </a>
+            `;
+          }
+        }
+
+        // Next link
+        if (navNext) {
+          navNext.innerHTML = '';
+          if (nextPost) {
+            const nextDate = formatSupabaseDate(nextPost.published_at);
+            navNext.innerHTML = `
+              <a href="post.html?slug=${encodeURIComponent(nextPost.slug)}"
+                 class="inline-flex items-start gap-2 text-primary hover:text-accent justify-end">
+                <span class="text-right">
+                  <span class="block text-[0.7rem] uppercase tracking-[0.16em] text-dark-grey">Next</span>
+                  <span class="block font-semibold">${nextPost.title}</span>
+                  <span class="block text-[0.7rem] text-dark-grey">${nextDate}</span>
+                </span>
+                <span class="mt-[2px] text-lg">→</span>
+              </a>
+            `;
+          }
+        }
+
+        // Sidebar: 3 most related
+        if (sidebarMore) {
+          sidebarMore.innerHTML = '';
+          const related = getRelatedPosts(currentPost, all, 3);
+
+          if (!related.length) {
+            sidebarMore.innerHTML = `
+              <p class="text-[0.78rem] text-dark-grey">
+                No additional insights available right now.
+              </p>`;
+          } else {
+            related.forEach(p => {
+              const dateText = formatSupabaseDate(p.published_at);
+              const item = document.createElement('a');
+              item.href = 'post.html?slug=' + encodeURIComponent(p.slug);
+              item.className =
+                'block rounded-lg border border-transparent hover:border-primary/40 hover:bg-paper/90 px-3 py-2 transition';
+              item.innerHTML = `
+                <p class="text-[0.8rem] font-semibold text-dark-brown">${p.title}</p>
+                <p class="text-[0.7rem] text-dark-grey">${dateText}</p>
+              `;
+              sidebarMore.appendChild(item);
+            });
+          }
+        }
+
+      } catch (err) {
+        console.error('Neighbor load error', err);
+        const sidebarMore = document.getElementById('sidebar-more');
+        if (sidebarMore) {
+          sidebarMore.innerHTML = `
+            <p class="text-[0.78rem] text-dark-grey">
+              More insights are currently unavailable.
+            </p>`;
+        }
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      const slug = getSlugFromQuery();
+      const loadingEl = document.getElementById('post-loading');
+      const errorEl = document.getElementById('post-error');
+      const articleEl = document.getElementById('post-article');
+
+      if (!slug) {
+        if (loadingEl) loadingEl.classList.add('hidden');
+        if (errorEl) {
+          errorEl.textContent = 'No insight specified.';
+          errorEl.classList.remove('hidden');
+        }
+        return;
+      }
+
+      try {
+            const { data, error } = await window.supabaseClient
+              .from('posts')
+              .select('title, slug, content, published_at, category, tags, author, is_published')
+          .eq('slug', slug)
+          .eq('is_published', true)
+          .maybeSingle();
+
+        if (error || !data) {
+          console.error(error);
+          if (loadingEl) loadingEl.classList.add('hidden');
+          if (errorEl) {
+            errorEl.textContent = 'Unable to load this insight.';
+            errorEl.classList.remove('hidden');
+          }
+          return;
+        }
+
+        const post = data;
+        // expose current slug for beforeunload handler
+        window.currentPostSlug = post.slug;
+        const dateText = formatSupabaseDate(post.published_at);
+        const readTimeText = estimateReadingTime(post.content || '');
+
+        document.getElementById('post-title').textContent = post.title || '';
+        document.getElementById('post-category').textContent = post.category || 'Insight';
+        document.getElementById('post-author').textContent = post.author || '';
+
+        const tags = Array.isArray(post.tags) ? post.tags.filter(Boolean) : [];
+        document.getElementById('post-tags').innerHTML = tags.length
+          ? tags.map(t => `<span class="inline-block mr-1">#${t}</span>`).join('')
+          : '';
+
+        // Top meta shows only read time; the date will be shown below the author
+        document.getElementById('post-meta').textContent = readTimeText || '';
+
+        // Render Markdown -> HTML and sanitize. If `marked`/`DOMPurify` are unavailable, fall back to raw content.
+        (function renderContent() {
+          let rendered = String(post.content || '');
+
+          // 1) decode entities first (handles &lt;p&gt; stored values)
+          try {
+            rendered = decodeHtmlEntities(rendered);
+          } catch (e) {
+            console.warn('decodeHtmlEntities error', e);
+          }
+
+          // 2) if decoded string contains HTML tags, use as HTML; otherwise parse Markdown
+          const looksLikeHtml = /<([a-z][\s\S]*?)>/i.test(rendered.trim());
+          if (!looksLikeHtml) {
+            try {
+              if (typeof marked !== 'undefined' && rendered.trim()) {
+                rendered = marked.parse(rendered);
+              }
+            } catch (e) {
+              console.warn('marked parse failed, using raw content', e);
+            }
+          }
+
+          // 3) sanitize if DOMPurify available
+          try {
+            if (typeof DOMPurify !== 'undefined') {
+              rendered = DOMPurify.sanitize(rendered);
+            }
+          } catch (e) {
+            console.warn('DOMPurify sanitize failed, using un-sanitized content', e);
+          }
+
+          // insert
+          const contentEl = document.getElementById('post-content');
+          if (contentEl) contentEl.innerHTML = rendered;
+
+          // diagnostic for developers
+          try {
+            const sampleHtml = contentEl ? contentEl.innerHTML.slice(0, 240) : '';
+            const sampleText = contentEl ? (contentEl.innerText || '').slice(0,240) : '';
+            console.info('post: rendered content sample', { sampleHtml, sampleText, dompurify: typeof DOMPurify !== 'undefined' });
+            if (/&lt;|&gt;|&amp;lt;|&amp;gt;/.test(sampleHtml)) {
+              console.warn('post: detected escaped HTML in rendered content — content may be double-escaped or sanitizer removed tags.', { sampleHtml });
+            }
+          } catch (e) {}
+        })();
+
+        // Set the date under the author (right-aligned)
+        const dateEl = document.getElementById('post-date');
+        if (dateEl) dateEl.textContent = dateText || '';
+
+        if (loadingEl) loadingEl.classList.add('hidden');
+        if (articleEl) articleEl.classList.remove('hidden');
+
+        // Determine previously visited post slug stored in this session (if any)
+        const previousVisitedSlug = sessionStorage.getItem('muro_last_viewed_post');
+
+        // Load prev/next + sidebar related (pass previousVisitedSlug so we can prefer it)
+        loadContext(post, previousVisitedSlug);
+
+        // After rendering, record this post as the last viewed for future navigations
+        try {
+          sessionStorage.setItem('muro_last_viewed_post', post.slug);
+        } catch (e) {
+          // ignore storage errors
+        }
+
+        // Ensure we update session storage on page unload/navigation too
+        try {
+          window.addEventListener('beforeunload', () => {
+            try { sessionStorage.setItem('muro_last_viewed_post', window.currentPostSlug || ''); } catch (e) {}
+          });
+        } catch (e) {}
+      } catch (err) {
+        console.error(err);
+        if (loadingEl) loadingEl.classList.add('hidden');
+        if (errorEl) {
+          errorEl.textContent = 'Something went wrong while loading this insight.';
+          errorEl.classList.remove('hidden');
+        }
+      }
+    });
+  </script>
+</body>
+</html>
